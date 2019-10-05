@@ -3,6 +3,8 @@
 
 use core::panic::PanicInfo;
 
+mod vga_buffer;
+
 #[panic_handler]
 fn panic(_inf: &PanicInfo) -> ! {
     loop {}
