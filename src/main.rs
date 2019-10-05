@@ -12,7 +12,7 @@ fn panic(_inf: &PanicInfo) -> ! {
 
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
-    use core::fmt::Write;
-    writeln!(io::WRITER.lock(), "Here is some text.").unwrap();
+    println!("Here is some text!");
+    print!("And some more text.");
     loop {}
 }
