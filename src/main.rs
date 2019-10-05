@@ -3,7 +3,7 @@
 
 use core::panic::PanicInfo;
 
-mod vga_buffer;
+mod io;
 
 #[panic_handler]
 fn panic(_inf: &PanicInfo) -> ! {
@@ -12,6 +12,7 @@ fn panic(_inf: &PanicInfo) -> ! {
 
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
-    vga_buffer::print_something();
+    use core::fmt::Write;
+    writeln!(io::WRITER.lock(), "Here is some text.").unwrap();
     loop {}
 }
