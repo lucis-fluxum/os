@@ -49,6 +49,7 @@ struct Buffer {
 }
 
 pub struct Writer {
+    row_position: usize,
     column_position: usize,
     color_code: ColorCode,
     buffer: &'static mut Buffer,
@@ -63,7 +64,7 @@ impl Writer {
                     self.new_line();
                 }
 
-                let row = BUFFER_HEIGHT - 1;
+                let row = self.row_position;
                 let col = self.column_position;
                 let color_code = self.color_code;
                 self.buffer.chars[row][col].write(ScreenChar {
@@ -87,13 +88,18 @@ impl Writer {
     }
 
     fn new_line(&mut self) {
-        for row in 1..BUFFER_HEIGHT {
-            for col in 0..BUFFER_WIDTH {
-                let character = self.buffer.chars[row][col].read();
-                self.buffer.chars[row - 1][col].write(character);
+        if self.row_position >= BUFFER_HEIGHT - 1 {
+            for row in 1..BUFFER_HEIGHT {
+                for col in 0..BUFFER_WIDTH {
+                    let character = self.buffer.chars[row][col].read();
+                    self.buffer.chars[row - 1][col].write(character);
+                }
             }
+            self.clear_row(BUFFER_HEIGHT - 1);
+        } else {
+            self.row_position += 1;
         }
-        self.clear_row(BUFFER_HEIGHT - 1);
+
         self.column_position = 0;
     }
 
@@ -118,6 +124,7 @@ impl fmt::Write for Writer {
 pub fn print_something() {
     use fmt::Write;
     let mut writer = Writer {
+        row_position: 0,
         column_position: 0,
         color_code: ColorCode::new(Color::Green, Color::Black),
         buffer: unsafe { &mut *(0xb8000 as *mut Buffer) },
@@ -125,7 +132,7 @@ pub fn print_something() {
 
     writer.write_byte(b'H');
     writer.write_string("ello! ");
-    write!(writer, "The numbers are {} and {}", 42, 1.0 / 3.0).unwrap();
-    writeln!(writer).unwrap();
-    writeln!(writer).unwrap();
+    writeln!(writer, "The numbers are {} and {}", 42, 1.0 / 3.0).unwrap();
+    writeln!(writer, "Here's another line").unwrap();
+    writeln!(writer, "And another one, but this time the line is quite long and will probably wrap over to the next line.").unwrap();
 }
