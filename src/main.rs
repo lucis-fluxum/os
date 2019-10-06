@@ -7,25 +7,36 @@
 use core::panic::PanicInfo;
 
 mod io;
-mod test;
 mod qemu;
+mod serial;
+mod test;
 
+#[cfg(not(test))]
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
     println!("{}", info);
     loop {}
 }
 
+#[cfg(test)]
+#[panic_handler]
+fn panic_test(info: &PanicInfo) -> ! {
+    serial_println!("[FAIL]\n");
+    serial_println!("Error: {}\n", info);
+    qemu::exit(qemu::ExitCode::Failed);
+    loop {}
+}
+
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
     #[cfg(test)]
-    test_main();
+        test_main();
     loop {}
 }
 
 #[test_case]
 fn trivial_assertion() {
-    print!("trivial assertion... ");
+    serial_print!("trivial assertion... ");
     assert_eq!(1, 1);
-    println!("[ok]");
+    serial_println!("[OK]");
 }
