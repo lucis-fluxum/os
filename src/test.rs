@@ -1,5 +1,5 @@
-use crate::serial_println;
 use crate::qemu;
+use crate::serial_println;
 
 #[cfg(test)]
 pub fn test_runner(tests: &[&dyn Fn()]) {

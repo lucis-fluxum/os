@@ -33,10 +33,3 @@ pub extern "C" fn _start() -> ! {
         test_main();
     loop {}
 }
-
-#[test_case]
-fn trivial_assertion() {
-    serial_print!("trivial assertion... ");
-    assert_eq!(1, 1);
-    serial_println!("[OK]");
-}
