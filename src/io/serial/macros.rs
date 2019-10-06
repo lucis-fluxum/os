@@ -1,6 +1,6 @@
 #[macro_export]
 macro_rules! serial_print {
-    ($($arg:tt)*) => ($crate::serial::_print(format_args!($($arg)*)));
+    ($($arg:tt)*) => ($crate::io::serial::_print(format_args!($($arg)*)));
 }
 
 #[macro_export]

@@ -8,7 +8,6 @@ use core::panic::PanicInfo;
 
 mod io;
 mod qemu;
-mod serial;
 mod test;
 
 #[cfg(not(test))]
