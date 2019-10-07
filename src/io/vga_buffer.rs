@@ -10,6 +10,9 @@ use crate::io::vga_buffer::color::*;
 pub mod color;
 pub mod macros;
 
+#[cfg(test)]
+mod tests;
+
 const BUFFER_HEIGHT: usize = 25;
 const BUFFER_WIDTH: usize = 80;
 
