@@ -1,16 +1,22 @@
 #![no_std]
-#![no_main]
+#![cfg_attr(test, no_main)]
 #![feature(custom_test_frameworks)]
-#![test_runner(os::test::test_runner)]
+#![test_runner(crate::test::test_runner)]
 #![reexport_test_harness_main = "test_main"]
 
 use core::panic::PanicInfo;
 
+pub mod io;
+pub mod qemu;
+pub mod test;
+
+#[cfg(test)]
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
-    os::test::test_panic_handler(info)
+    test::test_panic_handler(info)
 }
 
+#[cfg(test)]
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
     test_main();

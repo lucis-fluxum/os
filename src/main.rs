@@ -1,16 +1,12 @@
 #![no_std]
 #![no_main]
 #![feature(custom_test_frameworks)]
-#![test_runner(crate::test::test_runner)]
+#![test_runner(os::test::test_runner)]
 #![reexport_test_harness_main = "test_main"]
 
 use core::panic::PanicInfo;
 
-mod io;
-mod qemu;
-
-#[cfg(test)]
-mod test;
+use os::println;
 
 #[cfg(not(test))]
 #[panic_handler]
@@ -22,10 +18,7 @@ fn panic(info: &PanicInfo) -> ! {
 #[cfg(test)]
 #[panic_handler]
 fn panic_test(info: &PanicInfo) -> ! {
-    serial_println!("[FAIL]\n");
-    serial_println!("Error: {}\n", info);
-    qemu::exit(qemu::ExitCode::Failed);
-    loop {}
+    os::test::test_panic_handler(info)
 }
 
 #[no_mangle]
