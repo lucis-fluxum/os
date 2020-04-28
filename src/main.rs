@@ -17,12 +17,15 @@ fn panic(info: &PanicInfo) -> ! {
 
 #[cfg(test)]
 #[panic_handler]
-fn panic_test(info: &PanicInfo) -> ! {
+fn panic(info: &PanicInfo) -> ! {
     os::test::test_panic_handler(info)
 }
 
+// Entry point for starting the OS, or running main tests
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
-    #[cfg(test)] test_main();
+    #[cfg(test)]
+    test_main();
+
     loop {}
 }

@@ -13,8 +13,8 @@ pub mod macros;
 #[cfg(test)]
 mod tests;
 
-const BUFFER_HEIGHT: usize = 25;
 const BUFFER_WIDTH: usize = 80;
+const BUFFER_HEIGHT: usize = 25;
 
 #[repr(transparent)]
 struct VGABuffer {
@@ -55,7 +55,7 @@ impl Writer {
                 // Only supports ASCII and the additional bytes of code page 437
                 0x20..=0x7e | b'\n' => self.write_byte(byte),
                 // Print '■' for unsupported characters
-                _ => self.write_byte(0xfe)
+                _ => self.write_byte(0xfe),
             }
         }
     }
