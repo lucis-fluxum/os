@@ -1,8 +1,5 @@
 #![no_std]
 #![no_main]
-#![feature(custom_test_frameworks)]
-#![test_runner(test_runner)]
-#![reexport_test_harness_main = "test_main"]
 
 use core::panic::PanicInfo;
 use os::{qemu, serial_print, serial_println};
@@ -16,22 +13,13 @@ fn panic(_info: &PanicInfo) -> ! {
 
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
-    test_main();
+    should_panic();
+    serial_println!("[test did not panic]");
+    qemu::exit(qemu::ExitCode::Failed);
     loop {}
 }
 
-pub fn test_runner(tests: &[&dyn Fn()]) {
-    serial_println!("Running {} tests", tests.len());
-    for test in tests {
-        test();
-        serial_println!("[test did not panic]");
-        qemu::exit(qemu::ExitCode::Failed);
-    }
-    qemu::exit(qemu::ExitCode::Success);
-}
-
-#[test_case]
-fn should_fail() {
-    serial_print!("should_fail... ");
+fn should_panic() {
+    serial_print!("should_panic... ");
     assert_eq!(0, 1);
 }
