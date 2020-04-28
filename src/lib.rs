@@ -1,19 +1,19 @@
 #![no_std]
 #![cfg_attr(test, no_main)]
 #![feature(custom_test_frameworks)]
-#![test_runner(crate::test::test_runner)]
+#![test_runner(crate::testing::test_runner)]
 #![reexport_test_harness_main = "test_main"]
 
 use core::panic::PanicInfo;
 
 pub mod io;
 pub mod qemu;
-pub mod test;
+pub mod testing;
 
 #[cfg(test)]
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
-    test::test_panic_handler(info)
+    testing::test_panic_handler(info)
 }
 
 // Entry point for running unit tests
