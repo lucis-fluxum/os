@@ -6,12 +6,10 @@
 
 use core::panic::PanicInfo;
 
-use os::println;
-
 #[cfg(not(test))]
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
-    println!("{}", info);
+    os::println!("{}", info);
     loop {}
 }
 
@@ -24,6 +22,8 @@ fn panic(info: &PanicInfo) -> ! {
 // Entry point for starting the OS, or running main tests
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
+    os::initialize();
+
     #[cfg(test)]
     test_main();
 
