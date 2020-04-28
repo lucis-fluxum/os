@@ -5,6 +5,7 @@
 #![reexport_test_harness_main = "test_main"]
 
 use core::panic::PanicInfo;
+use os::{println, serial_print, serial_println};
 
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
@@ -16,4 +17,11 @@ fn panic(info: &PanicInfo) -> ! {
 pub extern "C" fn _start() -> ! {
     test_main();
     loop {}
+}
+
+#[test_case]
+fn test_println() {
+    serial_print!("test_println... ");
+    println!("test_println output");
+    serial_println!("[ok]");
 }
