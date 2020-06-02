@@ -23,7 +23,7 @@ fn panic(info: &core::panic::PanicInfo) -> ! {
 pub extern "C" fn _start() -> ! {
     initialize();
     test_main();
-    loop {}
+    halt();
 }
 
 // Main OS initialization procedure: set up IDT, GDT, interrupt controller, etc.
@@ -31,4 +31,10 @@ pub fn initialize() {
     interrupts::initialize_interrupt_descriptor_table();
     gdt::initialize_global_descriptor_table();
     interrupts::initialize_interrupt_controller();
+}
+
+pub fn halt() -> ! {
+    loop {
+        x86_64::instructions::hlt();
+    }
 }

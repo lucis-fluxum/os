@@ -10,7 +10,7 @@ use core::panic::PanicInfo;
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
     os::println!("{}", info);
-    loop {}
+    os::halt();
 }
 
 #[cfg(test)]
@@ -27,5 +27,5 @@ pub extern "C" fn _start() -> ! {
     #[cfg(test)]
     test_main();
 
-    loop {}
+    os::halt();
 }
