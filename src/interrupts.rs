@@ -1,7 +1,7 @@
 use crate::gdt;
-use lazy_static::lazy_static;
+use conquer_once::spin::Lazy;
 use pic8259_simple::ChainedPics;
-use spin::Mutex;
+use spinning_top::Spinlock;
 use x86_64::structures::idt::InterruptDescriptorTable;
 
 mod handlers;
@@ -15,27 +15,23 @@ pub enum InterruptIndex {
     Timer = PIC_1_OFFSET,
 }
 
-lazy_static! {
-    static ref IDT: InterruptDescriptorTable = {
-        let mut table = InterruptDescriptorTable::new();
+static IDT: Lazy<InterruptDescriptorTable> = Lazy::new(|| {
+    let mut table = InterruptDescriptorTable::new();
+    table
+        .breakpoint
+        .set_handler_fn(handlers::breakpoint_handler);
+    unsafe {
         table
-            .breakpoint
-            .set_handler_fn(handlers::breakpoint_handler);
-        unsafe {
-            table
-                .double_fault
-                .set_handler_fn(handlers::double_fault_handler)
-                .set_stack_index(gdt::DOUBLE_FAULT_IST_INDEX);
-        }
-        table[InterruptIndex::Timer as usize].set_handler_fn(handlers::timer_handler);
-        table
-    };
-}
+            .double_fault
+            .set_handler_fn(handlers::double_fault_handler)
+            .set_stack_index(gdt::DOUBLE_FAULT_IST_INDEX);
+    }
+    table[InterruptIndex::Timer as usize].set_handler_fn(handlers::timer_handler);
+    table
+});
 
-lazy_static! {
-    static ref PICS: Mutex<ChainedPics> =
-        Mutex::new(unsafe { ChainedPics::new(PIC_1_OFFSET, PIC_2_OFFSET) });
-}
+static PICS: Lazy<Spinlock<ChainedPics>> =
+    Lazy::new(|| Spinlock::new(unsafe { ChainedPics::new(PIC_1_OFFSET, PIC_2_OFFSET) }));
 
 pub fn initialize_interrupt_descriptor_table() {
     IDT.load();

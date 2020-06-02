@@ -14,13 +14,13 @@ test-success-exit-code = 33 # Since (0x10 << 1) | 1 = 33
 test-timeout = 300
 
 [dependencies]
-bootloader = "0.9.2"
+bootloader = "0.9.4"
+conquer-once = { version = "0.2.0", default-features = false }
 volatile = "0.2.6"
-lazy_static = { version = "1.4.0", features = ["spin_no_std"] }
 pic8259_simple = "0.2.0"
-spin = "0.5.2"
-x86_64 = "0.10.1"
-uart_16550 = "0.2.5"
+spinning_top = "0.1.0"
+x86_64 = "0.11.0"
+uart_16550 = "0.2.7"
 
 [[test]]
 name = "should_panic"

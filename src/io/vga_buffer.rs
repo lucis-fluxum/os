@@ -1,9 +1,8 @@
 use core::fmt::{self, Write};
 
-use spin::Mutex;
+use conquer_once::spin::Lazy;
+use spinning_top::Spinlock;
 use volatile::Volatile;
-
-use lazy_static::lazy_static;
 
 use crate::io::vga_buffer::color::*;
 
@@ -94,14 +93,14 @@ impl fmt::Write for Writer {
     }
 }
 
-lazy_static! {
-    pub static ref WRITER: Mutex<Writer> = Mutex::new(Writer {
+pub static WRITER: Lazy<Spinlock<Writer>> = Lazy::new(|| {
+    Spinlock::new(Writer {
         row_position: 0,
         column_position: 0,
         color_code: ColorCode::new(Color::Green, Color::Black),
         buffer: unsafe { &mut *(0xb8000 as *mut VGABuffer) },
-    });
-}
+    })
+});
 
 #[doc(hidden)]
 pub fn _print(args: fmt::Arguments) {

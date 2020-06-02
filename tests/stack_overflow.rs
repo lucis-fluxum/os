@@ -2,8 +2,8 @@
 #![no_main]
 #![feature(abi_x86_interrupt)]
 
+use conquer_once::spin::Lazy;
 use core::panic::PanicInfo;
-use lazy_static::lazy_static;
 use os::{qemu, serial_print, serial_println};
 use x86_64::structures::idt::{InterruptDescriptorTable, InterruptStackFrame};
 
@@ -14,18 +14,16 @@ fn panic(info: &PanicInfo) -> ! {
 
 // Set up a custom interrupt descriptor table with a handler function that
 // prints [ok] and exits qemu.
-lazy_static! {
-    static ref TEST_IDT: InterruptDescriptorTable = {
-        let mut table = InterruptDescriptorTable::new();
-        unsafe {
-            table
-                .double_fault
-                .set_handler_fn(test_double_fault_handler)
-                .set_stack_index(os::gdt::DOUBLE_FAULT_IST_INDEX);
-        }
+static TEST_IDT: Lazy<InterruptDescriptorTable> = Lazy::new(|| {
+    let mut table = InterruptDescriptorTable::new();
+    unsafe {
         table
-    };
-}
+            .double_fault
+            .set_handler_fn(test_double_fault_handler)
+            .set_stack_index(os::gdt::DOUBLE_FAULT_IST_INDEX);
+    }
+    table
+});
 
 extern "x86-interrupt" fn test_double_fault_handler(
     _stack_frame: &mut InterruptStackFrame,
@@ -51,4 +49,3 @@ pub extern "C" fn _start() -> ! {
 
     panic!("Continued running after stack overflow!");
 }
-
