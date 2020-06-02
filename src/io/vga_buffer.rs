@@ -1,4 +1,4 @@
-use core::fmt;
+use core::fmt::{self, Write};
 
 use spin::Mutex;
 use volatile::Volatile;
@@ -105,6 +105,9 @@ lazy_static! {
 
 #[doc(hidden)]
 pub fn _print(args: fmt::Arguments) {
-    use core::fmt::Write;
-    WRITER.lock().write_fmt(args).unwrap();
+    // Disable interrupts to prevent deadlock if an interrupt handler tries to print something
+    // while WRITER is locked
+    x86_64::instructions::interrupts::without_interrupts(|| {
+        WRITER.lock().write_fmt(args).unwrap();
+    });
 }
