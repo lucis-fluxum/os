@@ -1,0 +1,13 @@
+language: rust
+rust:
+  - nightly
+
+before_install:
+  - sudo apt-get -y install qemu-system-x86
+  - cargo install cargo-xbuild bootimage
+  - rustup component add rust-src llvm-tools-preview
+
+script:
+  - cargo xbuild --verbose --all
+  - cargo xtest --verbose --all
+
