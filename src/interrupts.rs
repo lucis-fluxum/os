@@ -13,6 +13,7 @@ pub const PIC_2_OFFSET: u8 = PIC_1_OFFSET + 8;
 #[repr(u8)]
 pub enum InterruptIndex {
     Timer = PIC_1_OFFSET,
+    Keyboard,
 }
 
 static IDT: Lazy<InterruptDescriptorTable> = Lazy::new(|| {
@@ -27,6 +28,7 @@ static IDT: Lazy<InterruptDescriptorTable> = Lazy::new(|| {
             .set_stack_index(gdt::DOUBLE_FAULT_IST_INDEX);
     }
     table[InterruptIndex::Timer as usize].set_handler_fn(handlers::timer_handler);
+    table[InterruptIndex::Keyboard as usize].set_handler_fn(handlers::keyboard_handler);
     table
 });
 

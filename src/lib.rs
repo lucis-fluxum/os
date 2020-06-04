@@ -10,6 +10,7 @@ use log::info;
 pub mod gdt;
 pub mod interrupts;
 pub mod io;
+pub mod keyboard;
 pub mod logging;
 pub mod qemu;
 pub mod testing;

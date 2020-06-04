@@ -17,6 +17,7 @@ test-timeout = 300
 bootloader = "0.9.4"
 conquer-once = { version = "0.2.0", default-features = false }
 log = "0.4.8"
+pc-keyboard = "0.5.0"
 pic8259_simple = "0.2.0"
 spinning_top = "0.1.0"
 uart_16550 = "0.2.7"
