@@ -1,4 +1,7 @@
-use core::fmt::{self, Write};
+use core::{
+    fmt::{self, Write},
+    mem,
+};
 
 use conquer_once::spin::Lazy;
 use spinning_top::Spinlock;
@@ -97,7 +100,7 @@ pub static WRITER: Lazy<Spinlock<Writer>> = Lazy::new(|| {
     Spinlock::new(Writer {
         row_position: 0,
         column_position: 0,
-        color_code: ColorCode::new(Color::Green, Color::Black),
+        color_code: ColorCode::new(Color::White, Color::Black),
         buffer: unsafe { &mut *(0xb8000 as *mut VGABuffer) },
     })
 });
@@ -108,5 +111,17 @@ pub fn _print(args: fmt::Arguments) {
     // while WRITER is locked
     x86_64::instructions::interrupts::without_interrupts(|| {
         WRITER.lock().write_fmt(args).unwrap();
+    });
+}
+
+#[doc(hidden)]
+pub fn _print_colored(args: fmt::Arguments, color_code: ColorCode) {
+    // Disable interrupts to prevent deadlock if an interrupt handler tries to print something
+    // while WRITER is locked
+    x86_64::instructions::interrupts::without_interrupts(|| {
+        let mut writer = WRITER.lock();
+        let old_color_code = mem::replace(&mut writer.color_code, color_code);
+        writer.write_fmt(args).unwrap();
+        mem::replace(&mut writer.color_code, old_color_code);
     });
 }
