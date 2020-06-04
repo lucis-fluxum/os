@@ -10,7 +10,6 @@ use volatile::Volatile;
 use crate::io::vga_buffer::color::*;
 
 pub(crate) mod color;
-pub(crate) mod macros;
 
 #[cfg(test)]
 mod tests;
