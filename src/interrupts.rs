@@ -1,8 +1,9 @@
-use crate::gdt;
 use conquer_once::spin::Lazy;
 use pic8259_simple::ChainedPics;
 use spinning_top::Spinlock;
 use x86_64::structures::idt::InterruptDescriptorTable;
+
+use crate::gdt;
 
 mod handlers;
 

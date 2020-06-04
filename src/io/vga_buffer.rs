@@ -7,7 +7,7 @@ use conquer_once::spin::Lazy;
 use spinning_top::Spinlock;
 use volatile::Volatile;
 
-use crate::io::vga_buffer::color::*;
+use color::*;
 
 pub(crate) mod color;
 

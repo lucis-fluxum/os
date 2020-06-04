@@ -1,7 +1,6 @@
 use core::panic::PanicInfo;
 
-use crate::qemu;
-use crate::serial_println;
+use crate::{qemu, serial_println};
 
 pub fn test_runner(tests: &[&dyn Fn()]) {
     serial_println!("Running {} tests", tests.len());

@@ -5,6 +5,7 @@
 #![reexport_test_harness_main = "test_main"]
 
 use core::panic::PanicInfo;
+
 use os::{println, serial_print, serial_println};
 
 #[panic_handler]

@@ -1,6 +1,6 @@
-use crate::io::vga_buffer::color::*;
-
 use log::{Level, LevelFilter, Log, Metadata, Record};
+
+use crate::io::vga_buffer::color::*;
 
 struct GlobalLogger;
 

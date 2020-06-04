@@ -1,8 +1,7 @@
-use crate::{println, serial_print, serial_println};
 use core::fmt::Write;
 
-use super::color::ColoredChar;
-use super::WRITER;
+use super::{color::ColoredChar, WRITER};
+use crate::{println, serial_print, serial_println};
 
 #[test_case]
 fn test_vga_buffer_println_single() {

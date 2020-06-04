@@ -2,6 +2,7 @@
 #![no_main]
 
 use core::panic::PanicInfo;
+
 use os::{qemu, serial_print, serial_println};
 
 #[panic_handler]

@@ -2,10 +2,12 @@
 #![no_main]
 #![feature(abi_x86_interrupt)]
 
-use conquer_once::spin::Lazy;
 use core::panic::PanicInfo;
-use os::{qemu, serial_print, serial_println};
+
+use conquer_once::spin::Lazy;
 use x86_64::structures::idt::{InterruptDescriptorTable, InterruptStackFrame};
+
+use os::{qemu, serial_print, serial_println};
 
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
