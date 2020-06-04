@@ -6,12 +6,12 @@ use x86_64::structures::idt::InterruptDescriptorTable;
 
 mod handlers;
 
-pub const PIC_1_OFFSET: u8 = 32;
-pub const PIC_2_OFFSET: u8 = PIC_1_OFFSET + 8;
+const PIC_1_OFFSET: u8 = 32;
+const PIC_2_OFFSET: u8 = PIC_1_OFFSET + 8;
 
 #[derive(Debug, Clone, Copy)]
 #[repr(u8)]
-pub enum InterruptIndex {
+pub(crate) enum InterruptIndex {
     Timer = PIC_1_OFFSET,
     Keyboard,
 }

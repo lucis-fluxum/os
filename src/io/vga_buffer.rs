@@ -9,8 +9,8 @@ use volatile::Volatile;
 
 use crate::io::vga_buffer::color::*;
 
-pub mod color;
-pub mod macros;
+pub(crate) mod color;
+pub(crate) mod macros;
 
 #[cfg(test)]
 mod tests;
@@ -23,7 +23,7 @@ struct VGABuffer {
     chars: [[Volatile<ColoredChar>; BUFFER_WIDTH]; BUFFER_HEIGHT],
 }
 
-pub struct Writer {
+struct Writer {
     row_position: usize,
     column_position: usize,
     color_code: ColorCode,
@@ -31,7 +31,7 @@ pub struct Writer {
 }
 
 impl Writer {
-    pub fn write_byte(&mut self, byte: u8) {
+    fn write_byte(&mut self, byte: u8) {
         match byte {
             b'\n' => self.new_line(),
             byte => {
@@ -51,7 +51,7 @@ impl Writer {
         }
     }
 
-    pub fn write_string(&mut self, string: &str) {
+    fn write_string(&mut self, string: &str) {
         for byte in string.bytes() {
             match byte {
                 // Only supports ASCII and the additional bytes of code page 437
@@ -96,7 +96,7 @@ impl fmt::Write for Writer {
     }
 }
 
-pub static WRITER: Lazy<Spinlock<Writer>> = Lazy::new(|| {
+static WRITER: Lazy<Spinlock<Writer>> = Lazy::new(|| {
     Spinlock::new(Writer {
         row_position: 0,
         column_position: 0,

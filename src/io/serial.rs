@@ -4,9 +4,9 @@ use conquer_once::spin::Lazy;
 use spinning_top::Spinlock;
 use uart_16550::SerialPort;
 
-pub mod macros;
+mod macros;
 
-pub static SERIAL1: Lazy<Spinlock<SerialPort>> = Lazy::new(|| {
+static SERIAL1: Lazy<Spinlock<SerialPort>> = Lazy::new(|| {
     let mut serial_port = unsafe { SerialPort::new(0x3F8) };
     serial_port.init();
     Spinlock::new(serial_port)

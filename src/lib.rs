@@ -9,9 +9,10 @@ use log::info;
 
 pub mod gdt;
 pub mod interrupts;
+#[doc(hidden)]
 pub mod io;
-pub mod keyboard;
-pub mod logging;
+pub(crate) mod keyboard;
+pub(crate) mod logging;
 pub mod qemu;
 pub mod testing;
 
@@ -32,6 +33,7 @@ pub extern "C" fn _start() -> ! {
 
 // Main OS initialization procedure: set up IDT, GDT, interrupt controller, etc.
 pub fn initialize() {
+    // Set up logging using VGA text buffer
     logging::initialize();
     info!("Initializing OS...");
     info!("  - interrupt descriptor table");
