@@ -5,9 +5,12 @@
 #![test_runner(crate::testing::test_runner)]
 #![reexport_test_harness_main = "test_main"]
 
+use log::info;
+
 pub mod gdt;
 pub mod interrupts;
 pub mod io;
+pub mod logging;
 pub mod qemu;
 pub mod testing;
 
@@ -28,9 +31,15 @@ pub extern "C" fn _start() -> ! {
 
 // Main OS initialization procedure: set up IDT, GDT, interrupt controller, etc.
 pub fn initialize() {
+    logging::initialize();
+    info!("Initializing OS...");
+    info!("  - interrupt descriptor table");
     interrupts::initialize_interrupt_descriptor_table();
+    info!("  - global descriptor table");
     gdt::initialize_global_descriptor_table();
+    info!("  - interrupt controller");
     interrupts::initialize_interrupt_controller();
+    info!("Initialization complete.");
 }
 
 pub fn halt() -> ! {

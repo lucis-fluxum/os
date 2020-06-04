@@ -16,11 +16,12 @@ test-timeout = 300
 [dependencies]
 bootloader = "0.9.4"
 conquer-once = { version = "0.2.0", default-features = false }
-volatile = "0.2.6"
+log = "0.4.8"
 pic8259_simple = "0.2.0"
 spinning_top = "0.1.0"
-x86_64 = "0.11.0"
 uart_16550 = "0.2.7"
+volatile = "0.2.6"
+x86_64 = "0.11.0"
 
 [[test]]
 name = "should_panic"
