@@ -22,6 +22,9 @@ static IDT: Lazy<InterruptDescriptorTable> = Lazy::new(|| {
     table
         .breakpoint
         .set_handler_fn(handlers::breakpoint_handler);
+    table
+        .page_fault
+        .set_handler_fn(handlers::page_fault_handler);
     unsafe {
         table
             .double_fault
