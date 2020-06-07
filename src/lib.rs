@@ -5,6 +5,8 @@
 #![test_runner(crate::testing::test_runner)]
 #![reexport_test_harness_main = "test_main"]
 
+#[cfg(test)]
+use bootloader::{entry_point, BootInfo};
 use log::info;
 
 pub mod gdt;
@@ -22,14 +24,15 @@ fn panic(info: &core::panic::PanicInfo) -> ! {
     testing::test_panic_handler(info)
 }
 
-// Entry point for running unit tests
 #[cfg(test)]
-#[no_mangle]
-pub extern "C" fn _start() -> ! {
+fn run_unit_tests(_boot_info: &'static BootInfo) -> ! {
     initialize();
     test_main();
     halt();
 }
+
+#[cfg(test)]
+entry_point!(run_unit_tests);
 
 // Main OS initialization procedure: set up IDT, GDT, interrupt controller, etc.
 pub fn initialize() {

@@ -6,6 +6,8 @@
 
 use core::panic::PanicInfo;
 
+use bootloader::{entry_point, BootInfo};
+
 #[cfg(not(test))]
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
@@ -20,8 +22,7 @@ fn panic(info: &PanicInfo) -> ! {
 }
 
 // Entry point for starting the OS, or running main tests
-#[no_mangle]
-pub extern "C" fn _start() -> ! {
+fn main(_boot_info: &'static BootInfo) -> ! {
     os::initialize();
 
     #[cfg(test)]
@@ -29,3 +30,5 @@ pub extern "C" fn _start() -> ! {
 
     os::halt();
 }
+
+entry_point!(main);
