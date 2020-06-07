@@ -7,7 +7,7 @@
 use core::panic::PanicInfo;
 
 use bootloader::{entry_point, BootInfo};
-use x86_64::VirtAddr;
+use x86_64::{structures::paging::MapperAllSizes, VirtAddr};
 
 #[cfg(not(test))]
 #[panic_handler]
@@ -27,6 +27,7 @@ fn main(boot_info: &'static BootInfo) -> ! {
     os::initialize();
 
     let phys_mem_offset = VirtAddr::new(boot_info.physical_memory_offset);
+    let mapper = unsafe { os::memory::initialize_mapper(phys_mem_offset) };
 
     let addresses = [
         // the identity-mapped vga buffer page
@@ -41,7 +42,7 @@ fn main(boot_info: &'static BootInfo) -> ! {
 
     for &address in &addresses {
         let virt = VirtAddr::new(address);
-        let phys = unsafe { os::memory::translate_addr(virt, phys_mem_offset) };
+        let phys = mapper.translate_addr(virt);
         log::debug!("{:?} -> {:?}", virt, phys);
     }
 
