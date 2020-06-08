@@ -1,10 +1,11 @@
+use bootloader::bootinfo::{MemoryMap, MemoryRegionType};
 use x86_64::{
     registers::control::Cr3,
-    structures::paging::{
-        FrameAllocator, Mapper, OffsetPageTable, Page, PageTable, PhysFrame, Size4KiB,
-    },
+    structures::paging::{FrameAllocator, OffsetPageTable, PageTable, PhysFrame, Size4KiB},
     PhysAddr, VirtAddr,
 };
+
+const PAGE_SIZE: usize = 4096;
 
 /// Initialize a new OffsetPageTable mapper.
 ///
@@ -20,29 +21,43 @@ pub unsafe fn initialize_mapper(physical_memory_offset: VirtAddr) -> OffsetPageT
     OffsetPageTable::new(&mut *page_table_ptr, physical_memory_offset)
 }
 
-/// Creates an example mapping for the given page to frame `0xb8000`.
-pub fn create_example_mapping(
-    page: Page,
-    mapper: &mut OffsetPageTable,
-    frame_allocator: &mut impl FrameAllocator<Size4KiB>,
-) {
-    use x86_64::structures::paging::PageTableFlags;
-
-    let frame = PhysFrame::containing_address(PhysAddr::new(0xb8000));
-    let flags = PageTableFlags::PRESENT | PageTableFlags::WRITABLE;
-
-    let map_to_result = unsafe {
-        // FIXME: this is not safe, we do it only for testing
-        mapper.map_to(page, frame, flags, frame_allocator)
-    };
-    map_to_result.expect("map_to failed").flush();
+/// A FrameAllocator that returns usable frames from the bootloader's memory map.
+pub struct BootInfoFrameAllocator {
+    memory_map: &'static MemoryMap,
+    next: usize,
 }
 
-/// A FrameAllocator that always returns `None`.
-pub struct EmptyFrameAllocator;
+impl BootInfoFrameAllocator {
+    /// Create a FrameAllocator from the passed memory map.
+    ///
+    /// This function is unsafe because the caller must guarantee that the passed
+    /// memory map is valid. The main requirement is that all frames that are marked
+    /// as `USABLE` in it are really unused.
+    pub unsafe fn new(memory_map: &'static MemoryMap) -> Self {
+        BootInfoFrameAllocator {
+            memory_map,
+            next: 0,
+        }
+    }
 
-unsafe impl FrameAllocator<Size4KiB> for EmptyFrameAllocator {
+    // Map usable memory regions to physical frames by breaking the address ranges
+    // into page-sized chunks.
+    fn usable_frames(&self) -> impl Iterator<Item = PhysFrame> {
+        self.memory_map
+            .iter()
+            .filter(|region| region.region_type == MemoryRegionType::Usable)
+            .map(|usable_region| usable_region.range.start_addr()..usable_region.range.end_addr())
+            // Divide regions into page-sized chunks (may leave extra bytes at end of some regions)
+            .flat_map(|range| range.step_by(PAGE_SIZE))
+            // Yield physical frames corresponding to start of each chunk
+            .map(|address| PhysFrame::containing_address(PhysAddr::new(address)))
+    }
+}
+
+unsafe impl FrameAllocator<Size4KiB> for BootInfoFrameAllocator {
     fn allocate_frame(&mut self) -> Option<PhysFrame> {
-        None
+        let frame = self.usable_frames().nth(self.next);
+        self.next += 1;
+        frame
     }
 }
