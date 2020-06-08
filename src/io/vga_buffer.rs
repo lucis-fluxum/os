@@ -18,18 +18,18 @@ const BUFFER_WIDTH: usize = 80;
 const BUFFER_HEIGHT: usize = 25;
 
 #[repr(transparent)]
-struct VGABuffer {
+struct RawVGABuffer {
     chars: [[Volatile<ColoredChar>; BUFFER_WIDTH]; BUFFER_HEIGHT],
 }
 
-struct Writer {
+struct VGABuffer {
     row_position: usize,
     column_position: usize,
     color_code: ColorCode,
-    buffer: &'static mut VGABuffer,
+    buffer: &'static mut RawVGABuffer,
 }
 
-impl Writer {
+impl VGABuffer {
     fn write_byte(&mut self, byte: u8) {
         match byte {
             b'\n' => self.new_line(),
@@ -88,37 +88,37 @@ impl Writer {
     }
 }
 
-impl fmt::Write for Writer {
+impl fmt::Write for VGABuffer {
     fn write_str(&mut self, s: &str) -> fmt::Result {
         self.write_string(s);
         Ok(())
     }
 }
 
-static WRITER: Lazy<Spinlock<Writer>> = Lazy::new(|| {
-    Spinlock::new(Writer {
+static VGA_BUFFER: Lazy<Spinlock<VGABuffer>> = Lazy::new(|| {
+    Spinlock::new(VGABuffer {
         row_position: 0,
         column_position: 0,
         color_code: ColorCode::new(Color::White, Color::Black),
-        buffer: unsafe { &mut *(0xb8000 as *mut VGABuffer) },
+        buffer: unsafe { &mut *(0xb8000 as *mut RawVGABuffer) },
     })
 });
 
 #[doc(hidden)]
 pub fn _print(args: fmt::Arguments) {
     // Disable interrupts to prevent deadlock if an interrupt handler tries to print something
-    // while WRITER is locked
+    // while VGA_BUFFER is locked
     x86_64::instructions::interrupts::without_interrupts(|| {
-        WRITER.lock().write_fmt(args).unwrap();
+        VGA_BUFFER.lock().write_fmt(args).unwrap();
     });
 }
 
 #[doc(hidden)]
 pub fn _print_colored(args: fmt::Arguments, color_code: ColorCode) {
     // Disable interrupts to prevent deadlock if an interrupt handler tries to print something
-    // while WRITER is locked
+    // while VGA_BUFFER is locked
     x86_64::instructions::interrupts::without_interrupts(|| {
-        let mut writer = WRITER.lock();
+        let mut writer = VGA_BUFFER.lock();
         let old_color_code = mem::replace(&mut writer.color_code, color_code);
         writer.write_fmt(args).unwrap();
         mem::replace(&mut writer.color_code, old_color_code);

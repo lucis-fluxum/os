@@ -1,6 +1,6 @@
 use core::fmt::Write;
 
-use super::{color::ColoredChar, WRITER};
+use super::{color::ColoredChar, VGA_BUFFER};
 use crate::{println, serial_print, serial_println};
 
 #[test_case]
@@ -25,10 +25,10 @@ fn test_vga_buffer_println_bytes_match() {
 
     let s = "Some test string that fits on a single line";
 
-    // Avoid deadlocks in case an interrupt occurs while WRITER is locked
+    // Avoid deadlocks in case an interrupt occurs while VGA_BUFFER is locked
     x86_64::instructions::interrupts::without_interrupts(|| {
-        let mut writer = WRITER.lock();
-        // Use writeln since we've already locked WRITER. Also, print a newline before the test
+        let mut writer = VGA_BUFFER.lock();
+        // Use writeln since we've already locked VGA_BUFFER. Also, print a newline before the test
         // string so any existing text on the current line is removed.
         writeln!(writer, "\n{}", s).unwrap();
         let row_pos = writer.row_position;
