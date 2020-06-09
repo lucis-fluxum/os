@@ -37,14 +37,11 @@ extern "x86-interrupt" fn test_double_fault_handler(
     os::halt();
 }
 
-fn main(boot_info: &'static BootInfo) -> ! {
+fn main(_boot_info: &'static BootInfo) -> ! {
     serial_print!("stack_overflow... ");
 
-    // Main initialization sequence, using test IDT
     TEST_IDT.load();
     os::gdt::initialize_global_descriptor_table();
-    os::interrupts::initialize_interrupt_controller();
-    os::memory::initialize_heap_allocator(boot_info);
 
     #[allow(unconditional_recursion)]
     fn stack_overflow() {

@@ -18,7 +18,7 @@ fn panic(info: &PanicInfo) -> ! {
 }
 
 fn main(boot_info: &'static BootInfo) -> ! {
-    os::initialize(boot_info);
+    os::memory::initialize_heap_allocator(boot_info);
     test_main();
     os::halt();
 }
