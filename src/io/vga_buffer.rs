@@ -121,6 +121,6 @@ pub fn _print_colored(args: fmt::Arguments, color_code: ColorCode) {
         let mut writer = VGA_BUFFER.lock();
         let old_color_code = mem::replace(&mut writer.color_code, color_code);
         writer.write_fmt(args).unwrap();
-        mem::replace(&mut writer.color_code, old_color_code);
+        let _ = mem::replace(&mut writer.color_code, old_color_code);
     });
 }
