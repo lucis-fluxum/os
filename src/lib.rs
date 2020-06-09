@@ -2,8 +2,11 @@
 #![cfg_attr(test, no_main)]
 #![feature(abi_x86_interrupt)]
 #![feature(custom_test_frameworks)]
+#![feature(alloc_error_handler)]
 #![test_runner(crate::testing::test_runner)]
 #![reexport_test_harness_main = "test_main"]
+
+extern crate alloc;
 
 #[cfg(test)]
 use bootloader::{entry_point, BootInfo};

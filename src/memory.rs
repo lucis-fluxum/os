@@ -5,6 +5,8 @@ use x86_64::{
     PhysAddr, VirtAddr,
 };
 
+mod allocator;
+
 const PAGE_SIZE: usize = 4096;
 
 /// Initialize a new OffsetPageTable mapper.
