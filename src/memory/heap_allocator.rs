@@ -1,5 +1,6 @@
 use alloc::alloc::Layout;
 
+use bootloader::BootInfo;
 use linked_list_allocator::LockedHeap;
 use x86_64::{
     structures::paging::{
@@ -8,8 +9,10 @@ use x86_64::{
     VirtAddr,
 };
 
-const HEAP_START: usize = 0x4444_4444_0000;
-const HEAP_SIZE: usize = 100 * 1024; // 100 KiB
+use super::frame_allocator::{self, BootInfoFrameAllocator};
+
+pub const HEAP_START: usize = 0x4444_4444_0000;
+pub const HEAP_SIZE: usize = 100 * 1024; // 100 KiB
 
 #[global_allocator]
 static ALLOCATOR: LockedHeap = LockedHeap::empty();
@@ -20,7 +23,7 @@ fn alloc_error_handler(layout: Layout) -> ! {
     crate::halt();
 }
 
-pub fn initialize_heap(
+fn initialize_heap(
     mapper: &mut impl Mapper<Size4KiB>,
     frame_allocator: &mut impl FrameAllocator<Size4KiB>,
 ) -> Result<(), MapToError<Size4KiB>> {
@@ -40,9 +43,16 @@ pub fn initialize_heap(
         unsafe { mapper.map_to(page, frame, flags, frame_allocator)?.flush() };
     }
 
+    Ok(())
+}
+
+pub fn initialize_heap_allocator(boot_info: &'static BootInfo) {
+    let phys_mem_offset = VirtAddr::new(boot_info.physical_memory_offset);
+    let mut mapper = unsafe { frame_allocator::initialize_mapper(phys_mem_offset) };
+    let mut frame_allocator = unsafe { BootInfoFrameAllocator::new(&boot_info.memory_map) };
+    initialize_heap(&mut mapper, &mut frame_allocator).expect("heap initialization failed");
+
     unsafe {
         ALLOCATOR.lock().init(HEAP_START, HEAP_SIZE);
     }
-
-    Ok(())
 }

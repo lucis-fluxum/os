@@ -4,6 +4,7 @@
 
 use core::panic::PanicInfo;
 
+use bootloader::{entry_point, BootInfo};
 use conquer_once::spin::Lazy;
 use x86_64::structures::idt::{InterruptDescriptorTable, InterruptStackFrame};
 
@@ -33,15 +34,17 @@ extern "x86-interrupt" fn test_double_fault_handler(
 ) -> ! {
     serial_println!("[ok]");
     qemu::exit(qemu::ExitCode::Success);
-    loop {}
+    os::halt();
 }
 
-#[no_mangle]
-pub extern "C" fn _start() -> ! {
+fn main(boot_info: &'static BootInfo) -> ! {
     serial_print!("stack_overflow... ");
 
-    os::gdt::initialize_global_descriptor_table();
+    // Main initialization sequence, using test IDT
     TEST_IDT.load();
+    os::gdt::initialize_global_descriptor_table();
+    os::interrupts::initialize_interrupt_controller();
+    os::memory::heap_allocator::initialize_heap_allocator(boot_info);
 
     #[allow(unconditional_recursion)]
     fn stack_overflow() {
@@ -51,3 +54,5 @@ pub extern "C" fn _start() -> ! {
 
     panic!("Continued running after stack overflow!");
 }
+
+entry_point!(main);
