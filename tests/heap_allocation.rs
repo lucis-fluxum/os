@@ -38,7 +38,7 @@ fn simple_allocation() {
 #[test_case]
 fn fill_entire_heap() {
     serial_print!("fill_entire_heap... ");
-    for i in 0..os::memory::heap_allocator::HEAP_SIZE {
+    for i in 0..os::memory::heap::HEAP_SIZE {
         let x = Box::new(i);
         assert_eq!(*x, i);
     }

@@ -44,7 +44,7 @@ fn main(boot_info: &'static BootInfo) -> ! {
     TEST_IDT.load();
     os::gdt::initialize_global_descriptor_table();
     os::interrupts::initialize_interrupt_controller();
-    os::memory::heap_allocator::initialize_heap_allocator(boot_info);
+    os::memory::initialize_heap_allocator(boot_info);
 
     #[allow(unconditional_recursion)]
     fn stack_overflow() {

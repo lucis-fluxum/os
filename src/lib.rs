@@ -52,7 +52,7 @@ pub fn initialize(boot_info: &'static BootInfo) {
     info!("  - interrupt controller");
     interrupts::initialize_interrupt_controller();
     info!("  - heap allocator");
-    memory::heap_allocator::initialize_heap_allocator(boot_info);
+    memory::initialize_heap_allocator(boot_info);
     info!("Initialization complete.");
 }
 
