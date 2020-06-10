@@ -11,7 +11,7 @@ pub fn test_runner(tests: &[&dyn Fn()]) {
 }
 
 pub fn test_panic_handler(info: &PanicInfo) -> ! {
-    serial_println!("[FAIL]\n");
+    serial_println!("[fail]\n");
     serial_println!("Error: {}\n", info);
     qemu::exit(qemu::ExitCode::Failed);
     crate::halt();

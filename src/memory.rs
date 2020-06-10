@@ -1,22 +1,23 @@
 use alloc::alloc::Layout;
 
 use bootloader::BootInfo;
-use linked_list_allocator::LockedHeap;
 use x86_64::VirtAddr;
 
+mod bump_allocator;
 pub mod frame_allocator;
 pub mod heap;
 
+use bump_allocator::BumpAllocator;
 use frame_allocator::BootInfoFrameAllocator;
 use heap::{HEAP_SIZE, HEAP_START};
 
 #[global_allocator]
-pub(crate) static HEAP_ALLOCATOR: LockedHeap = LockedHeap::empty();
+pub(crate) static HEAP_ALLOCATOR: Mutex<BumpAllocator> = Mutex::new(BumpAllocator::new());
 
 #[alloc_error_handler]
 fn alloc_error_handler(layout: Layout) -> ! {
-    log::error!("allocation error: {:?}", layout);
-    crate::halt();
+    // TODO: I don't like panicking here, maybe think of something else
+    panic!("allocation error: {:?}", layout);
 }
 
 pub fn initialize_heap_allocator(boot_info: &'static BootInfo) {
@@ -30,3 +31,28 @@ pub fn initialize_heap_allocator(boot_info: &'static BootInfo) {
     }
 }
 
+/// Align the given address `addr` upwards to nearest `alignment`.
+///
+/// Requires that `alignment` is a power of two.
+fn align_up(addr: usize, alignment: usize) -> usize {
+    debug_assert!(alignment.count_ones() == 1);
+    // Round addr + alignment - 1 down to the nearest multiple of alignment
+    (addr + alignment - 1) & !(alignment - 1)
+}
+
+/// A wrapper around spinning_top::Spinlock to permit trait implementations.
+pub(crate) struct Mutex<A> {
+    inner: spinning_top::Spinlock<A>,
+}
+
+impl<A> Mutex<A> {
+    pub(crate) const fn new(inner: A) -> Self {
+        Self {
+            inner: spinning_top::Spinlock::new(inner),
+        }
+    }
+
+    pub(crate) fn lock(&self) -> spinning_top::SpinlockGuard<A> {
+        self.inner.lock()
+    }
+}
