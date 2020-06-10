@@ -6,13 +6,14 @@ use x86_64::VirtAddr;
 mod bump_allocator;
 pub mod frame_allocator;
 pub mod heap;
+mod pool_allocator;
 
-use bump_allocator::BumpAllocator;
 use frame_allocator::BootInfoFrameAllocator;
 use heap::{HEAP_SIZE, HEAP_START};
+use pool_allocator::PoolAllocator;
 
 #[global_allocator]
-pub(crate) static HEAP_ALLOCATOR: Mutex<BumpAllocator> = Mutex::new(BumpAllocator::new());
+pub(crate) static HEAP_ALLOCATOR: Mutex<PoolAllocator> = Mutex::new(PoolAllocator::new());
 
 #[alloc_error_handler]
 fn alloc_error_handler(layout: Layout) -> ! {
@@ -27,7 +28,7 @@ pub fn initialize_heap_allocator(boot_info: &'static BootInfo) {
     heap::initialize(&mut mapper, &mut frame_allocator).expect("heap initialization failed");
 
     unsafe {
-        HEAP_ALLOCATOR.lock().init(HEAP_START, HEAP_SIZE);
+        HEAP_ALLOCATOR.lock().initialize(HEAP_START, HEAP_SIZE);
     }
 }
 
