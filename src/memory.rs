@@ -4,16 +4,17 @@ use bootloader::BootInfo;
 use x86_64::VirtAddr;
 
 mod bump_allocator;
-pub mod frame_allocator;
-pub mod heap;
+mod frame_allocator;
+mod heap;
 mod pool_allocator;
 
-use frame_allocator::BootInfoFrameAllocator;
-use heap::{HEAP_SIZE, HEAP_START};
-use pool_allocator::PoolAllocator;
+pub use bump_allocator::BumpAllocator;
+pub use frame_allocator::BootInfoFrameAllocator;
+pub use heap::{HEAP_SIZE, HEAP_START};
+pub use pool_allocator::PoolAllocator;
 
 #[global_allocator]
-pub(crate) static HEAP_ALLOCATOR: Mutex<PoolAllocator> = Mutex::new(PoolAllocator::new());
+pub static HEAP_ALLOCATOR: Mutex<PoolAllocator> = Mutex::new(PoolAllocator::new());
 
 #[alloc_error_handler]
 fn alloc_error_handler(layout: Layout) -> ! {
@@ -41,19 +42,15 @@ fn align_up(addr: usize, alignment: usize) -> usize {
     (addr + alignment - 1) & !(alignment - 1)
 }
 
-/// A wrapper around spinning_top::Spinlock to permit trait implementations.
-pub(crate) struct Mutex<A> {
-    inner: spinning_top::Spinlock<A>,
-}
+/// A wrapper around `spinning_top::Spinlock` to permit trait implementations.
+pub struct Mutex<T>(spinning_top::Spinlock<T>);
 
-impl<A> Mutex<A> {
-    pub(crate) const fn new(inner: A) -> Self {
-        Self {
-            inner: spinning_top::Spinlock::new(inner),
-        }
+impl<T> Mutex<T> {
+    pub const fn new(inner: T) -> Self {
+        Self(spinning_top::Spinlock::new(inner))
     }
 
-    pub(crate) fn lock(&self) -> spinning_top::SpinlockGuard<A> {
-        self.inner.lock()
+    pub fn lock(&self) -> spinning_top::SpinlockGuard<T> {
+        self.0.lock()
     }
 }

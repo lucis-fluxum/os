@@ -38,7 +38,7 @@ fn simple_allocation() {
 #[test_case]
 fn fill_entire_heap() {
     serial_print!("fill_entire_heap... ");
-    for i in 0..os::memory::heap::HEAP_SIZE {
+    for i in 0..os::memory::HEAP_SIZE {
         let x = Box::new(i);
         assert_eq!(*x, i);
     }
@@ -49,7 +49,7 @@ fn fill_entire_heap() {
 fn long_lived_after_filled_heap() {
     serial_print!("long_lived_after_filled_heap... ");
     let long_lived = Box::new(1);
-    for i in 0..os::memory::heap::HEAP_SIZE {
+    for i in 0..os::memory::HEAP_SIZE {
         let x = Box::new(i);
         assert_eq!(*x, i);
     }

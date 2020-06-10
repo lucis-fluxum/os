@@ -3,7 +3,7 @@ use core::ptr;
 
 use super::{align_up, Mutex};
 
-pub(crate) struct BumpAllocator {
+pub struct BumpAllocator {
     heap_start: usize,
     heap_end: usize,
     next: usize,
@@ -12,7 +12,7 @@ pub(crate) struct BumpAllocator {
 
 impl BumpAllocator {
     /// Creates a new empty bump allocator.
-    pub(crate) const fn new() -> Self {
+    pub const fn new() -> Self {
         BumpAllocator {
             heap_start: 0,
             heap_end: 0,
@@ -25,7 +25,7 @@ impl BumpAllocator {
     ///
     /// This method is unsafe because the caller must ensure that the given
     /// memory range is unused. Also, this method must be called only once.
-    pub(crate) unsafe fn initialize(&mut self, heap_start: usize, heap_size: usize) {
+    pub unsafe fn initialize(&mut self, heap_start: usize, heap_size: usize) {
         self.heap_start = heap_start;
         self.heap_end = heap_start + heap_size;
         self.next = heap_start;

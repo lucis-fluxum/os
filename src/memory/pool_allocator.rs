@@ -21,13 +21,13 @@ impl FreeListNode {
     }
 }
 
-pub(crate) struct PoolAllocator {
+pub struct PoolAllocator {
     head: FreeListNode,
 }
 
 impl PoolAllocator {
     /// Creates an empty LinkedListAllocator.
-    pub(crate) const fn new() -> Self {
+    pub const fn new() -> Self {
         Self {
             head: FreeListNode::new(0),
         }
@@ -37,7 +37,7 @@ impl PoolAllocator {
     ///
     /// This function is unsafe because the caller must guarantee that the given heap bounds
     /// are valid and that the heap is unused. This method must be called only once.
-    pub(crate) unsafe fn initialize(&mut self, heap_start: usize, heap_size: usize) {
+    pub unsafe fn initialize(&mut self, heap_start: usize, heap_size: usize) {
         self.free_region(heap_start, heap_size);
     }
 
