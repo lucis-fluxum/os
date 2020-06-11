@@ -16,6 +16,7 @@ test-timeout = 300
 [dependencies]
 bootloader = {version = "0.9.4", features = ["map_physical_memory"] }
 conquer-once = { version = "0.2.0", default-features = false }
+linked_list_allocator = "0.8.4"
 log = "0.4.8"
 pc-keyboard = "0.5.0"
 pic8259_simple = "0.2.0"

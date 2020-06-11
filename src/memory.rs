@@ -1,20 +1,22 @@
 use alloc::alloc::Layout;
 
+use ::linked_list_allocator::LockedHeap;
 use bootloader::BootInfo;
 use x86_64::VirtAddr;
 
 mod bump_allocator;
+mod fixed_size_block_allocator;
 mod frame_allocator;
 mod heap;
 mod linked_list_allocator;
 
+pub use self::linked_list_allocator::LinkedListAllocator;
 pub use bump_allocator::BumpAllocator;
 pub use frame_allocator::BootInfoFrameAllocator;
 pub use heap::{HEAP_SIZE, HEAP_START};
-pub use linked_list_allocator::LinkedListAllocator;
 
 #[global_allocator]
-pub static HEAP_ALLOCATOR: Mutex<LinkedListAllocator> = Mutex::new(LinkedListAllocator::new());
+pub static HEAP_ALLOCATOR: LockedHeap = LockedHeap::empty();
 
 #[alloc_error_handler]
 fn alloc_error_handler(layout: Layout) -> ! {
@@ -29,7 +31,7 @@ pub fn initialize_heap_allocator(boot_info: &'static BootInfo) {
     heap::initialize(&mut mapper, &mut frame_allocator).expect("heap initialization failed");
 
     unsafe {
-        HEAP_ALLOCATOR.lock().initialize(HEAP_START, HEAP_SIZE);
+        HEAP_ALLOCATOR.lock().init(HEAP_START, HEAP_SIZE);
     }
 }
 

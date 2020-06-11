@@ -21,6 +21,11 @@ impl FreeListNode {
     }
 }
 
+/// A heap allocator that uses a linked list to keep track of freed memory regions.
+///
+/// This allocator eventually creates many small free regions without merging adjacent
+/// free regions, which causes fragmentation. Using the `LockedHeap` type from the
+/// `linked_list_allocator` crate is recommended instead.
 pub struct LinkedListAllocator {
     head: FreeListNode,
 }
@@ -150,8 +155,6 @@ unsafe impl GlobalAlloc for Mutex<LinkedListAllocator> {
         }
     }
 
-    // TODO: This creates many small free regions without merging adjacent free regions, which
-    // causes fragmentation. Implement merging for these adjacent regions.
     unsafe fn dealloc(&self, ptr: *mut u8, layout: Layout) {
         // Make sure the region we're about to free can hold a FreeListNode
         let (size, _) = LinkedListAllocator::size_align(layout);
