@@ -1,11 +1,11 @@
-use super::{InterruptIndex, PICS};
-use crate::{keyboard, print};
 use log::error;
-use pc_keyboard::DecodedKey;
 use x86_64::{
     registers::control::Cr2,
     structures::idt::{InterruptStackFrame, PageFaultErrorCode},
 };
+
+use super::{InterruptIndex, PICS};
+use crate::{keyboard, task::scancode_queue};
 
 pub(crate) extern "x86-interrupt" fn breakpoint_handler(stack_frame: &mut InterruptStackFrame) {
     error!("EXCEPTION: breakpoint\n{:#?}", stack_frame);
@@ -40,12 +40,7 @@ pub(crate) extern "x86-interrupt" fn timer_handler(_stack_frame: &mut InterruptS
 }
 
 pub(crate) extern "x86-interrupt" fn keyboard_handler(_stack_frame: &mut InterruptStackFrame) {
-    if let Ok(Some(key)) = keyboard::decode_key() {
-        match key {
-            DecodedKey::Unicode(character) => print!("{}", character),
-            DecodedKey::RawKey(key) => print!("{:?}", key),
-        }
-    }
+    scancode_queue::add_scancode(keyboard::read_scancode());
 
     unsafe {
         PICS.lock()
