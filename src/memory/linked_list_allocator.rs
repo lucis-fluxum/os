@@ -43,7 +43,9 @@ impl LinkedListAllocator {
     /// This function is unsafe because the caller must guarantee that the given heap bounds
     /// are valid and that the heap is unused. This method must be called only once.
     pub unsafe fn initialize(&mut self, heap_start: usize, heap_size: usize) {
-        self.free_region(heap_start, heap_size);
+        unsafe {
+            self.free_region(heap_start, heap_size);
+        }
     }
 
     /// Adds the given memory region to the front of the list.
@@ -57,8 +59,10 @@ impl LinkedListAllocator {
         node.next = self.head.next.take();
         // write new node to start of freed region
         let node_ptr = addr as *mut FreeListNode;
-        node_ptr.write(node);
-        self.head.next = Some(&mut *node_ptr)
+        unsafe {
+            node_ptr.write(node);
+            self.head.next = Some(&mut *node_ptr)
+        }
     }
 
     /// Looks for a free region with the given size and alignment and removes it from the list.
@@ -147,7 +151,9 @@ unsafe impl GlobalAlloc for Mutex<LinkedListAllocator> {
             let excess_size = region.end_addr() - alloc_end;
             if excess_size > 0 {
                 // We know leftover space is big enough to hold a FreeListNode
-                allocator.free_region(alloc_end, excess_size);
+                unsafe {
+                    allocator.free_region(alloc_end, excess_size);
+                }
             }
             alloc_start as *mut u8
         } else {
@@ -158,6 +164,6 @@ unsafe impl GlobalAlloc for Mutex<LinkedListAllocator> {
     unsafe fn dealloc(&self, ptr: *mut u8, layout: Layout) {
         // Make sure the region we're about to free can hold a FreeListNode
         let (size, _) = LinkedListAllocator::size_align(layout);
-        self.lock().free_region(ptr as usize, size)
+        unsafe { self.lock().free_region(ptr as usize, size) }
     }
 }

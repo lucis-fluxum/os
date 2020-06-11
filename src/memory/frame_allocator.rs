@@ -18,7 +18,7 @@ pub unsafe fn initialize_mapper(physical_memory_offset: VirtAddr) -> OffsetPageT
     let phys_addr = level_4_table_frame.start_address();
     let virt_addr = physical_memory_offset + phys_addr.as_u64();
     let page_table_ptr: *mut PageTable = virt_addr.as_mut_ptr();
-    OffsetPageTable::new(&mut *page_table_ptr, physical_memory_offset)
+    unsafe { OffsetPageTable::new(&mut *page_table_ptr, physical_memory_offset) }
 }
 
 /// A FrameAllocator that returns usable frames from the bootloader's memory map.

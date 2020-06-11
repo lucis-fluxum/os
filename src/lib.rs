@@ -4,6 +4,9 @@
 #![feature(custom_test_frameworks)]
 #![feature(alloc_error_handler)]
 #![feature(const_fn)]
+#![feature(const_in_array_repeat_expressions)]
+#![feature(unsafe_block_in_unsafe_fn)]
+#![deny(unsafe_op_in_unsafe_fn)]
 #![test_runner(crate::testing::test_runner)]
 #![reexport_test_harness_main = "test_main"]
 
