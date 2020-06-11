@@ -23,7 +23,7 @@ pub mod interrupt;
 #[doc(hidden)]
 pub mod io;
 pub(crate) mod keyboard;
-pub(crate) mod logging;
+pub mod logging;
 pub mod memory;
 pub mod qemu;
 pub mod task;
@@ -48,7 +48,7 @@ entry_point!(run_unit_tests);
 // Main OS initialization procedure: set up IDT, GDT, interrupt controller, etc.
 pub fn initialize(boot_info: &'static BootInfo) {
     // Set up logging using VGA text buffer
-    logging::initialize();
+    logging::initialize_logging();
 
     info!("Initializing OS...");
     info!("  - interrupt descriptor table");

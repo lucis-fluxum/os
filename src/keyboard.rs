@@ -3,14 +3,13 @@ use pc_keyboard::{layouts, DecodedKey, Error, HandleControl, Keyboard, ScancodeS
 use spinning_top::Spinlock;
 use x86_64::instructions::port::Port;
 
-pub(crate) static KEYBOARD: Lazy<Spinlock<Keyboard<layouts::Us104Key, ScancodeSet1>>> =
-    Lazy::new(|| {
-        Spinlock::new(Keyboard::new(
-            layouts::Us104Key,
-            ScancodeSet1,
-            HandleControl::Ignore,
-        ))
-    });
+static KEYBOARD: Lazy<Spinlock<Keyboard<layouts::Us104Key, ScancodeSet1>>> = Lazy::new(|| {
+    Spinlock::new(Keyboard::new(
+        layouts::Us104Key,
+        ScancodeSet1,
+        HandleControl::Ignore,
+    ))
+});
 
 pub(crate) fn read_scancode() -> u8 {
     let mut port = Port::new(0x60);

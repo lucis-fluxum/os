@@ -2,11 +2,11 @@ use log::{Level, LevelFilter, Log, Metadata, Record};
 
 use crate::io::vga_buffer::color::*;
 
-struct GlobalLogger;
+pub struct GlobalLogger;
 
 static LOGGER: GlobalLogger = GlobalLogger;
 
-pub(crate) fn initialize() {
+pub fn initialize_logging() {
     log::set_logger(&LOGGER)
         .map(|()| log::set_max_level(LevelFilter::Trace))
         .unwrap()
