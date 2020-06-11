@@ -19,7 +19,7 @@ use bootloader::BootInfo;
 use log::info;
 
 pub mod gdt;
-pub mod interrupts;
+pub mod interrupt;
 #[doc(hidden)]
 pub mod io;
 pub(crate) mod keyboard;
@@ -52,11 +52,11 @@ pub fn initialize(boot_info: &'static BootInfo) {
 
     info!("Initializing OS...");
     info!("  - interrupt descriptor table");
-    interrupts::initialize_interrupt_descriptor_table();
+    interrupt::initialize_interrupt_descriptor_table();
     info!("  - global descriptor table");
     gdt::initialize_global_descriptor_table();
     info!("  - interrupt controller");
-    interrupts::initialize_interrupt_controller();
+    interrupt::initialize_interrupt_controller();
     info!("  - heap allocator");
     memory::initialize_heap_allocator(boot_info);
     info!("Initialization complete.");
