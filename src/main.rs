@@ -23,9 +23,21 @@ fn panic(info: &PanicInfo) -> ! {
     os::testing::test_panic_handler(info)
 }
 
+async fn get_num() -> i32 {
+    24
+}
+
 // Entry point for starting the OS, or running main tests
 fn main(boot_info: &'static BootInfo) -> ! {
     os::initialize(boot_info);
+
+    let mut executor = os::task::BasicExecutor::new();
+    executor.spawn(async {
+        let num = get_num().await;
+        log::debug!("got {}", num);
+    });
+    log::debug!("spawned task");
+    executor.run();
 
     #[cfg(test)]
     test_main();

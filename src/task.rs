@@ -5,12 +5,16 @@ use core::{
     task::{Context, Poll},
 };
 
-pub struct Task<'f> {
-    future: Pin<Box<dyn Future<Output = ()> + 'f>>,
+mod basic_executor;
+
+pub use basic_executor::BasicExecutor;
+
+pub struct Task<'t> {
+    future: Pin<Box<dyn Future<Output = ()> + 't>>,
 }
 
-impl<'f> Task<'f> {
-    pub fn new(future: impl Future<Output = ()> + 'f) -> Self {
+impl<'t> Task<'t> {
+    pub fn new(future: impl Future<Output = ()> + 't) -> Self {
         Self {
             future: Box::pin(future),
         }
