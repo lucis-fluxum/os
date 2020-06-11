@@ -42,7 +42,8 @@ impl FixedSizeBlockAllocator {
 
     /// Initialize the allocator with the given heap bounds.
     ///
-    /// This function is unsafe because the caller must guarantee that the given
+    /// # Safety
+    /// This method is unsafe because the caller must guarantee that the given
     /// heap bounds are valid and that the heap is unused. This method must be
     /// called only once.
     pub unsafe fn initialize(&mut self, heap_start: usize, heap_size: usize) {
@@ -103,6 +104,7 @@ unsafe impl GlobalAlloc for Mutex<FixedSizeBlockAllocator> {
                 assert!(mem::size_of::<Block>() <= BLOCK_SIZES[index]);
                 assert!(mem::align_of::<Block>() <= BLOCK_SIZES[index]);
 
+                #[allow(clippy::cast_ptr_alignment)]
                 let new_block_ptr = ptr as *mut Block;
                 unsafe {
                     // Write the new block info to the freed memory region

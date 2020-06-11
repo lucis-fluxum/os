@@ -40,7 +40,7 @@ pub fn initialize_heap_allocator(boot_info: &'static BootInfo) {
 ///
 /// Requires that `alignment` is a power of two.
 fn align_up(addr: usize, alignment: usize) -> usize {
-    debug_assert!(alignment.count_ones() == 1);
+    assert!(alignment.count_ones() == 1);
     // Round addr + alignment - 1 down to the nearest multiple of alignment
     (addr + alignment - 1) & !(alignment - 1)
 }

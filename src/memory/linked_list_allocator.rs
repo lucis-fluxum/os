@@ -40,7 +40,8 @@ impl LinkedListAllocator {
 
     /// Initialize the allocator with the given heap bounds.
     ///
-    /// This function is unsafe because the caller must guarantee that the given heap bounds
+    /// # Safety
+    /// This method is unsafe because the caller must guarantee that the given heap bounds
     /// are valid and that the heap is unused. This method must be called only once.
     pub unsafe fn initialize(&mut self, heap_start: usize, heap_size: usize) {
         unsafe {
