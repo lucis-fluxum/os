@@ -25,6 +25,7 @@ pub(crate) mod keyboard;
 pub(crate) mod logging;
 pub mod memory;
 pub mod qemu;
+pub mod task;
 pub mod testing;
 
 #[cfg(test)]
