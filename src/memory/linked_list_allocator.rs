@@ -150,6 +150,8 @@ unsafe impl GlobalAlloc for Mutex<LinkedListAllocator> {
         }
     }
 
+    // TODO: This creates many small free regions without merging adjacent free regions, which
+    // causes fragmentation. Implement merging for these adjacent regions.
     unsafe fn dealloc(&self, ptr: *mut u8, layout: Layout) {
         // Make sure the region we're about to free can hold a FreeListNode
         let (size, _) = LinkedListAllocator::size_align(layout);
