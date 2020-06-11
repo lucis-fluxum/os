@@ -9,6 +9,8 @@ use x86_64::instructions::interrupts::{self, enable_interrupts_and_hlt};
 
 use super::{Task, TaskId};
 
+const TASK_ID_QUEUE_SIZE: usize = 100;
+
 pub struct Executor<'f> {
     tasks: BTreeMap<TaskId, Task<'f>>,
     task_id_queue: Arc<ArrayQueue<TaskId>>,
@@ -19,7 +21,7 @@ impl<'f> Executor<'f> {
     pub fn new() -> Self {
         Executor {
             tasks: BTreeMap::new(),
-            task_id_queue: Arc::new(ArrayQueue::new(100)),
+            task_id_queue: Arc::new(ArrayQueue::new(TASK_ID_QUEUE_SIZE)),
             waker_cache: BTreeMap::new(),
         }
     }

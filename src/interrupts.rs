@@ -5,7 +5,7 @@ use x86_64::structures::idt::InterruptDescriptorTable;
 
 use crate::gdt;
 
-mod handlers;
+pub mod handlers;
 
 const PIC_1_OFFSET: u8 = 32;
 const PIC_2_OFFSET: u8 = PIC_1_OFFSET + 8;

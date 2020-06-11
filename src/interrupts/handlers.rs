@@ -5,13 +5,13 @@ use x86_64::{
 };
 
 use super::{InterruptIndex, PICS};
-use crate::{keyboard, task::scancode_queue};
+use crate::{keyboard, task::scancode_queue::ScancodeQueue};
 
-pub(crate) extern "x86-interrupt" fn breakpoint_handler(stack_frame: &mut InterruptStackFrame) {
+pub extern "x86-interrupt" fn breakpoint_handler(stack_frame: &mut InterruptStackFrame) {
     error!("EXCEPTION: breakpoint\n{:#?}", stack_frame);
 }
 
-pub(crate) extern "x86-interrupt" fn page_fault_handler(
+pub extern "x86-interrupt" fn page_fault_handler(
     stack_frame: &mut InterruptStackFrame,
     error_code: PageFaultErrorCode,
 ) {
@@ -24,7 +24,7 @@ pub(crate) extern "x86-interrupt" fn page_fault_handler(
     crate::halt();
 }
 
-pub(crate) extern "x86-interrupt" fn double_fault_handler(
+pub extern "x86-interrupt" fn double_fault_handler(
     stack_frame: &mut InterruptStackFrame,
     _error_code: u64,
 ) -> ! {
@@ -32,15 +32,15 @@ pub(crate) extern "x86-interrupt" fn double_fault_handler(
     crate::halt();
 }
 
-pub(crate) extern "x86-interrupt" fn timer_handler(_stack_frame: &mut InterruptStackFrame) {
+pub extern "x86-interrupt" fn timer_handler(_stack_frame: &mut InterruptStackFrame) {
     unsafe {
         PICS.lock()
             .notify_end_of_interrupt(InterruptIndex::Timer as u8);
     }
 }
 
-pub(crate) extern "x86-interrupt" fn keyboard_handler(_stack_frame: &mut InterruptStackFrame) {
-    scancode_queue::add_scancode(keyboard::read_scancode());
+pub extern "x86-interrupt" fn keyboard_handler(_stack_frame: &mut InterruptStackFrame) {
+    ScancodeQueue::add_scancode(keyboard::read_scancode());
 
     unsafe {
         PICS.lock()
