@@ -7,18 +7,18 @@ use core::{
 
 use super::Task;
 
-pub struct BasicExecutor<'t> {
-    task_queue: VecDeque<Task<'t>>,
+pub struct BasicExecutor<'f> {
+    task_queue: VecDeque<Task<'f>>,
 }
 
-impl<'t> BasicExecutor<'t> {
+impl<'f> BasicExecutor<'f> {
     pub fn new() -> Self {
         Self {
             task_queue: VecDeque::new(),
         }
     }
 
-    pub fn spawn(&mut self, future: impl Future<Output = ()> + 't) {
+    pub fn spawn(&mut self, future: impl Future<Output = ()> + 'f) {
         self.task_queue.push_back(Task::new(future))
     }
 

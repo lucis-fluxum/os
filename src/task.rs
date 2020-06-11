@@ -12,9 +12,11 @@ use pc_keyboard::DecodedKey;
 use crate::{keyboard, print};
 
 mod basic_executor;
+mod executor;
 pub(crate) mod scancode_queue;
 
 pub use basic_executor::BasicExecutor;
+pub use executor::Executor;
 use scancode_queue::ScancodeQueue;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
@@ -27,13 +29,13 @@ impl TaskId {
     }
 }
 
-pub struct Task<'t> {
+pub struct Task<'f> {
     id: TaskId,
-    future: Pin<Box<dyn Future<Output = ()> + 't>>,
+    future: Pin<Box<dyn Future<Output = ()> + 'f>>,
 }
 
-impl<'t> Task<'t> {
-    pub fn new(future: impl Future<Output = ()> + 't) -> Self {
+impl<'f> Task<'f> {
+    pub fn new(future: impl Future<Output = ()> + 'f) -> Self {
         Self {
             id: TaskId::new(),
             future: Box::pin(future),

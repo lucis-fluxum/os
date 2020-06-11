@@ -27,7 +27,7 @@ fn panic(info: &PanicInfo) -> ! {
 fn main(boot_info: &'static BootInfo) -> ! {
     os::initialize(boot_info);
 
-    let mut executor = os::task::BasicExecutor::new();
+    let mut executor = os::task::Executor::new();
     executor.spawn(os::task::print_keypresses());
     executor.run();
 

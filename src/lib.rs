@@ -7,6 +7,7 @@
 #![feature(const_in_array_repeat_expressions)]
 #![feature(unsafe_block_in_unsafe_fn)]
 #![deny(unsafe_op_in_unsafe_fn)]
+#![feature(wake_trait)]
 #![test_runner(crate::testing::test_runner)]
 #![reexport_test_harness_main = "test_main"]
 
