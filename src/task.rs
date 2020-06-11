@@ -2,6 +2,7 @@ use alloc::boxed::Box;
 use core::{
     future::Future,
     pin::Pin,
+    sync::atomic::{AtomicU64, Ordering},
     task::{Context, Poll},
 };
 
@@ -16,13 +17,25 @@ pub(crate) mod scancode_queue;
 pub use basic_executor::BasicExecutor;
 use scancode_queue::ScancodeQueue;
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+struct TaskId(u64);
+
+impl TaskId {
+    fn new() -> Self {
+        static NEXT_ID: AtomicU64 = AtomicU64::new(0);
+        TaskId(NEXT_ID.fetch_add(1, Ordering::Relaxed))
+    }
+}
+
 pub struct Task<'t> {
+    id: TaskId,
     future: Pin<Box<dyn Future<Output = ()> + 't>>,
 }
 
 impl<'t> Task<'t> {
     pub fn new(future: impl Future<Output = ()> + 't) -> Self {
         Self {
+            id: TaskId::new(),
             future: Box::pin(future),
         }
     }
