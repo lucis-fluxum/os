@@ -21,11 +21,11 @@ impl FreeListNode {
     }
 }
 
-pub struct PoolAllocator {
+pub struct LinkedListAllocator {
     head: FreeListNode,
 }
 
-impl PoolAllocator {
+impl LinkedListAllocator {
     /// Creates an empty LinkedListAllocator.
     pub const fn new() -> Self {
         Self {
@@ -130,10 +130,10 @@ impl PoolAllocator {
     }
 }
 
-unsafe impl GlobalAlloc for Mutex<PoolAllocator> {
+unsafe impl GlobalAlloc for Mutex<LinkedListAllocator> {
     unsafe fn alloc(&self, layout: Layout) -> *mut u8 {
         // Make sure allocated space can hold a FreeListNode when it's freed later
-        let (size, align) = PoolAllocator::size_align(layout);
+        let (size, align) = LinkedListAllocator::size_align(layout);
         let mut allocator = self.lock();
 
         if let Some((region, alloc_start)) = allocator.allocate_region(size, align) {
@@ -152,7 +152,7 @@ unsafe impl GlobalAlloc for Mutex<PoolAllocator> {
 
     unsafe fn dealloc(&self, ptr: *mut u8, layout: Layout) {
         // Make sure the region we're about to free can hold a FreeListNode
-        let (size, _) = PoolAllocator::size_align(layout);
+        let (size, _) = LinkedListAllocator::size_align(layout);
         self.lock().free_region(ptr as usize, size)
     }
 }

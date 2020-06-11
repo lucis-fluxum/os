@@ -6,15 +6,15 @@ use x86_64::VirtAddr;
 mod bump_allocator;
 mod frame_allocator;
 mod heap;
-mod pool_allocator;
+mod linked_list_allocator;
 
 pub use bump_allocator::BumpAllocator;
 pub use frame_allocator::BootInfoFrameAllocator;
 pub use heap::{HEAP_SIZE, HEAP_START};
-pub use pool_allocator::PoolAllocator;
+pub use linked_list_allocator::LinkedListAllocator;
 
 #[global_allocator]
-pub static HEAP_ALLOCATOR: Mutex<PoolAllocator> = Mutex::new(PoolAllocator::new());
+pub static HEAP_ALLOCATOR: Mutex<LinkedListAllocator> = Mutex::new(LinkedListAllocator::new());
 
 #[alloc_error_handler]
 fn alloc_error_handler(layout: Layout) -> ! {
