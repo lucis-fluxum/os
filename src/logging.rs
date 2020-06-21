@@ -1,11 +1,15 @@
+//! Logging facilities.
+
 use log::{Level, LevelFilter, Log, Metadata, Record};
 
 use crate::io::vga_buffer::color::*;
 
+/// A structure implementing [`Log`] that prints to the VGA text buffer.
 pub struct GlobalLogger;
 
 static LOGGER: GlobalLogger = GlobalLogger;
 
+/// Sets the logger to be used by the [`log`] crate.
 pub fn initialize_logging() {
     log::set_logger(&LOGGER)
         .map(|()| log::set_max_level(LevelFilter::Trace))

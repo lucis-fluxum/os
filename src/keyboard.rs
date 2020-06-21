@@ -1,3 +1,5 @@
+//! Reading input from the keyboard.
+
 use conquer_once::spin::Lazy;
 use pc_keyboard::{layouts, DecodedKey, Error, HandleControl, Keyboard, ScancodeSet1};
 use spinning_top::Spinlock;
@@ -11,12 +13,14 @@ static KEYBOARD: Lazy<Spinlock<Keyboard<layouts::Us104Key, ScancodeSet1>>> = Laz
     ))
 });
 
-pub(crate) fn read_scancode() -> u8 {
+/// Get the scancode for the pressed key from IO port `0x60`.
+pub fn read_scancode() -> u8 {
     let mut port = Port::new(0x60);
     unsafe { port.read() }
 }
 
-pub(crate) fn decode_key(scancode: u8) -> Result<Option<DecodedKey>, Error> {
+/// Convert the scancode into a [`DecodedKey`] variant, if possible.
+pub fn decode_key(scancode: u8) -> Result<Option<DecodedKey>, Error> {
     let mut keyboard = KEYBOARD.lock();
     let key: Option<DecodedKey> = keyboard
         .add_byte(scancode)?

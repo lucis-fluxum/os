@@ -22,7 +22,7 @@ pub mod gdt;
 pub mod interrupt;
 #[doc(hidden)]
 pub mod io;
-pub(crate) mod keyboard;
+pub mod keyboard;
 pub mod logging;
 pub mod memory;
 pub mod qemu;
