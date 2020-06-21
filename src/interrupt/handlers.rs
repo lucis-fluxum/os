@@ -9,7 +9,7 @@ use x86_64::{
 use super::{InterruptIndex, PICS};
 use crate::{keyboard, task::scancode_queue::ScancodeQueue};
 
-/// Breakping exception handler. Currently, this just logs the exception and continues.
+/// Breakpoint exception handler. Currently, this just logs the exception and continues.
 pub extern "x86-interrupt" fn breakpoint_handler(stack_frame: &mut InterruptStackFrame) {
     error!("EXCEPTION: breakpoint\n{:#?}", stack_frame);
 }

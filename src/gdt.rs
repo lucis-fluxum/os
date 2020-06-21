@@ -1,3 +1,5 @@
+//! Global descriptor table initialization.
+
 use conquer_once::spin::Lazy;
 use x86_64::{
     instructions::{segmentation::set_cs, tables::load_tss},
@@ -8,6 +10,7 @@ use x86_64::{
     VirtAddr,
 };
 
+/// The first stack in the interrupt stack table is meant for the double fault handler.
 pub const DOUBLE_FAULT_IST_INDEX: u16 = 0;
 
 static TSS: Lazy<TaskStateSegment> = Lazy::new(|| {
@@ -39,6 +42,8 @@ static GDT: Lazy<(GlobalDescriptorTable, Selectors)> = Lazy::new(|| {
     )
 });
 
+/// Set up the global descriptor table with a kernel code segment and a task state segment
+/// that contains known good stacks to use in case of an interrupt.
 pub fn initialize_global_descriptor_table() {
     GDT.0.load();
     unsafe {

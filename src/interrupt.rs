@@ -1,3 +1,5 @@
+//! Interrupts, the programmable interrupt controller, and the interrupt descriptor table.
+
 use conquer_once::spin::Lazy;
 use pic8259_simple::ChainedPics;
 use spinning_top::Spinlock;
@@ -7,8 +9,10 @@ use crate::gdt;
 
 pub mod handlers;
 
-const PIC_1_OFFSET: u8 = 32;
-const PIC_2_OFFSET: u8 = PIC_1_OFFSET + 8;
+/// User-defined interrupts start at index 32.
+pub const PIC_1_OFFSET: u8 = 32;
+/// The second PIC starts 8 positions away from the first.
+pub const PIC_2_OFFSET: u8 = PIC_1_OFFSET + 8;
 
 #[derive(Debug, Clone, Copy)]
 #[repr(u8)]
