@@ -17,7 +17,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "bootloader"
-version = "0.9.4"
+version = "0.9.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
@@ -79,7 +79,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "futures-core 0.3.5 (registry+https://github.com/rust-lang/crates.io-index)",
  "futures-task 0.3.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "pin-project 0.4.20 (registry+https://github.com/rust-lang/crates.io-index)",
+ "pin-project 0.4.22 (registry+https://github.com/rust-lang/crates.io-index)",
  "pin-utils 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
@@ -116,7 +116,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 name = "os"
 version = "0.1.0"
 dependencies = [
- "bootloader 0.9.4 (registry+https://github.com/rust-lang/crates.io-index)",
+ "bootloader 0.9.5 (registry+https://github.com/rust-lang/crates.io-index)",
  "conquer-once 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "crossbeam-queue 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
  "futures-util 0.3.5 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -127,7 +127,7 @@ dependencies = [
  "spinning_top 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "uart_16550 0.2.7 (registry+https://github.com/rust-lang/crates.io-index)",
  "volatile 0.2.6 (registry+https://github.com/rust-lang/crates.io-index)",
- "x86_64 0.11.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "x86_64 0.11.1 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -145,20 +145,20 @@ dependencies = [
 
 [[package]]
 name = "pin-project"
-version = "0.4.20"
+version = "0.4.22"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "pin-project-internal 0.4.20 (registry+https://github.com/rust-lang/crates.io-index)",
+ "pin-project-internal 0.4.22 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
 name = "pin-project-internal"
-version = "0.4.20"
+version = "0.4.22"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "proc-macro2 1.0.18 (registry+https://github.com/rust-lang/crates.io-index)",
  "quote 1.0.7 (registry+https://github.com/rust-lang/crates.io-index)",
- "syn 1.0.31 (registry+https://github.com/rust-lang/crates.io-index)",
+ "syn 1.0.33 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -171,7 +171,7 @@ name = "proc-macro2"
 version = "1.0.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "unicode-xid 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "unicode-xid 0.2.1 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -197,12 +197,12 @@ dependencies = [
 
 [[package]]
 name = "syn"
-version = "1.0.31"
+version = "1.0.33"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "proc-macro2 1.0.18 (registry+https://github.com/rust-lang/crates.io-index)",
  "quote 1.0.7 (registry+https://github.com/rust-lang/crates.io-index)",
- "unicode-xid 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "unicode-xid 0.2.1 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -211,12 +211,12 @@ version = "0.2.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "bitflags 1.2.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "x86_64 0.11.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "x86_64 0.11.1 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
 name = "unicode-xid"
-version = "0.2.0"
+version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
@@ -226,7 +226,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "x86_64"
-version = "0.11.0"
+version = "0.11.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "bit_field 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -237,7 +237,7 @@ dependencies = [
 "checksum autocfg 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)" = "f8aac770f1885fd7e387acedd76065302551364496e46b3dd00860b2f8359b9d"
 "checksum bit_field 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)" = "ed8765909f9009617974ab6b7d332625b320b33c326b1e9321382ef1999b5d56"
 "checksum bitflags 1.2.1 (registry+https://github.com/rust-lang/crates.io-index)" = "cf1de2fe8c75bc145a2f577add951f8134889b4795d47466a54a5c846d691693"
-"checksum bootloader 0.9.4 (registry+https://github.com/rust-lang/crates.io-index)" = "56452f4da420d25cf4bbf5b8fdc1529a8bde79a081f2619ce7ebc6d581117261"
+"checksum bootloader 0.9.5 (registry+https://github.com/rust-lang/crates.io-index)" = "bb7239572eacd7c74ac0d6c75eb87a615058d6497a667728694e0d32b7bd5a20"
 "checksum cfg-if 0.1.10 (registry+https://github.com/rust-lang/crates.io-index)" = "4785bdd1c96b2a846b2bd7cc02e86b6b3dbf14e7e53446c4f54c92a361040822"
 "checksum conquer-once 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)" = "6f7644600a548ecad74e4a918392af1798f7dd045be610be3203b9e129b4f98f"
 "checksum conquer-util 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)" = "654fb2472cc369d311c547103a1fa81d467bef370ae7a0680f65939895b1182a"
@@ -253,15 +253,15 @@ dependencies = [
 "checksum maybe-uninit 2.0.0 (registry+https://github.com/rust-lang/crates.io-index)" = "60302e4db3a61da70c0cb7991976248362f30319e88850c487b9b95bbf059e00"
 "checksum pc-keyboard 0.5.0 (registry+https://github.com/rust-lang/crates.io-index)" = "c48392db76c4e9a69e0b3be356c5f97ebb7b14413c5e4fd0af4755dbf86e2fce"
 "checksum pic8259_simple 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)" = "af2a5497fb8e59bf8015f67b7dff238d75ef445e03f23edac24ac3a8f09be952"
-"checksum pin-project 0.4.20 (registry+https://github.com/rust-lang/crates.io-index)" = "e75373ff9037d112bb19bc61333a06a159eaeb217660dcfbea7d88e1db823919"
-"checksum pin-project-internal 0.4.20 (registry+https://github.com/rust-lang/crates.io-index)" = "10b4b44893d3c370407a1d6a5cfde7c41ae0478e31c516c85f67eb3adc51be6d"
+"checksum pin-project 0.4.22 (registry+https://github.com/rust-lang/crates.io-index)" = "12e3a6cdbfe94a5e4572812a0201f8c0ed98c1c452c7b8563ce2276988ef9c17"
+"checksum pin-project-internal 0.4.22 (registry+https://github.com/rust-lang/crates.io-index)" = "6a0ffd45cf79d88737d7cc85bfd5d2894bee1139b356e616fe85dc389c61aaf7"
 "checksum pin-utils 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "8b870d8c151b6f2fb93e84a13146138f05d02ed11c7e7c54f8826aaaf7c9f184"
 "checksum proc-macro2 1.0.18 (registry+https://github.com/rust-lang/crates.io-index)" = "beae6331a816b1f65d04c45b078fd8e6c93e8071771f41b8163255bbd8d7c8fa"
 "checksum quote 1.0.7 (registry+https://github.com/rust-lang/crates.io-index)" = "aa563d17ecb180e500da1cfd2b028310ac758de548efdd203e18f283af693f37"
 "checksum scopeguard 1.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "d29ab0c6d3fc0ee92fe66e2d99f700eab17a8d57d1c1d3b748380fb20baa78cd"
 "checksum spinning_top 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "32d801a3a53bcf5071f85fef8d5cab9e5f638fc5580a37e6eb7aba4b37438d24"
-"checksum syn 1.0.31 (registry+https://github.com/rust-lang/crates.io-index)" = "b5304cfdf27365b7585c25d4af91b35016ed21ef88f17ced89c7093b43dba8b6"
+"checksum syn 1.0.33 (registry+https://github.com/rust-lang/crates.io-index)" = "e8d5d96e8cbb005d6959f119f773bfaebb5684296108fb32600c00cde305b2cd"
 "checksum uart_16550 0.2.7 (registry+https://github.com/rust-lang/crates.io-index)" = "e58fc40dc1712664fc9b0a7bd8ca2f21ab49960924fb245a80a05e1e92f3dfe9"
-"checksum unicode-xid 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)" = "826e7639553986605ec5979c7dd957c7895e93eabed50ab2ffa7f6128a75097c"
+"checksum unicode-xid 0.2.1 (registry+https://github.com/rust-lang/crates.io-index)" = "f7fe0bb3479651439c9112f72b6c505038574c9fbb575ed1bf3b797fa39dd564"
 "checksum volatile 0.2.6 (registry+https://github.com/rust-lang/crates.io-index)" = "6af0edf5b4faacc31fc51159244d78d65ec580f021afcef7bd53c04aeabc7f29"
-"checksum x86_64 0.11.0 (registry+https://github.com/rust-lang/crates.io-index)" = "365de37eb7c6da582cbb510dd0f3f1235d24ff6309a8a96e8a9909cc9bfd608f"
+"checksum x86_64 0.11.1 (registry+https://github.com/rust-lang/crates.io-index)" = "9144cdef072afe8afcbc511be8f421de5b3eb9f4b8ff7abff369bee38f91e7e3"
