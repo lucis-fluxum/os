@@ -38,7 +38,7 @@ extern "x86-interrupt" fn test_double_fault_handler(
 }
 
 fn main(_boot_info: &'static BootInfo) -> ! {
-    serial_print!("stack_overflow... ");
+    serial_print!("stack_overflow::stack_overflow... ");
 
     TEST_IDT.load();
     os::gdt::initialize_global_descriptor_table();

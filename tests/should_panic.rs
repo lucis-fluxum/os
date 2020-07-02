@@ -21,6 +21,6 @@ pub extern "C" fn _start() -> ! {
 }
 
 fn should_panic() {
-    serial_print!("should_panic... ");
+    serial_print!("should_panic::should_panic... ");
     assert_eq!(0, 1);
 }
