@@ -56,12 +56,8 @@ pub fn initialize_interrupt_controller() {
 
 #[cfg(test)]
 mod tests {
-    use crate::{serial_print, serial_println};
-
     #[test_case]
     fn test_breakpoint_exception() {
-        serial_print!("test_breakpoint_exception... ");
         x86_64::instructions::interrupts::int3();
-        serial_println!("[ok]");
     }
 }

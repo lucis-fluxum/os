@@ -16,8 +16,7 @@ pub use frame_allocator::BootInfoFrameAllocator;
 pub use heap::{HEAP_SIZE, HEAP_START};
 
 #[global_allocator]
-static HEAP_ALLOCATOR: Mutex<FixedSizeBlockAllocator> =
-    Mutex::new(FixedSizeBlockAllocator::new());
+static HEAP_ALLOCATOR: Mutex<FixedSizeBlockAllocator> = Mutex::new(FixedSizeBlockAllocator::new());
 
 #[alloc_error_handler]
 fn alloc_error_handler(layout: Layout) -> ! {

@@ -6,7 +6,7 @@
 
 use core::panic::PanicInfo;
 
-use os::{println, serial_print, serial_println};
+use os::println;
 
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
@@ -21,7 +21,5 @@ pub extern "C" fn _start() -> ! {
 
 #[test_case]
 fn test_println() {
-    serial_print!("test_println... ");
     println!("test_println output");
-    serial_println!("[ok]");
 }

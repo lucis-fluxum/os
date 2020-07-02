@@ -1,28 +1,22 @@
 use core::fmt::Write;
 
 use super::{color::ColoredChar, VGA_BUFFER};
-use crate::{println, serial_print, serial_println};
+use crate::println;
 
 #[test_case]
 fn test_vga_buffer_println_single() {
-    serial_print!("test_vga_buffer_println_single... ");
     println!("test_vga_buffer_println_single output");
-    serial_println!("[ok]");
 }
 
 #[test_case]
 fn test_vga_buffer_println_many() {
-    serial_print!("test_vga_buffer_println_many... ");
     for _ in 0..200 {
         println!("test_vga_buffer_println_many output");
     }
-    serial_println!("[ok]");
 }
 
 #[test_case]
 fn test_vga_buffer_println_bytes_match() {
-    serial_print!("test_vga_buffer_println_bytes_match... ");
-
     let s = "Some test string that fits on a single line";
 
     // Avoid deadlocks in case an interrupt occurs while VGA_BUFFER is locked
@@ -37,6 +31,4 @@ fn test_vga_buffer_println_bytes_match() {
             assert_eq!(screen_char.ascii_character, c);
         }
     });
-
-    serial_println!("[ok]");
 }
