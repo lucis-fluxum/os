@@ -125,6 +125,7 @@ dependencies = [
  "pc-keyboard 0.5.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "pic8259_simple 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "spinning_top 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "tinypci 0.1.0 (git+https://github.com/trashbyte/tinypci)",
  "uart_16550 0.2.7 (registry+https://github.com/rust-lang/crates.io-index)",
  "volatile 0.2.6 (registry+https://github.com/rust-lang/crates.io-index)",
  "x86_64 0.11.1 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -206,6 +207,11 @@ dependencies = [
 ]
 
 [[package]]
+name = "tinypci"
+version = "0.1.0"
+source = "git+https://github.com/trashbyte/tinypci#f1afba83f809210cfed8630d284ceffe9e32cd14"
+
+[[package]]
 name = "uart_16550"
 version = "0.2.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -261,6 +267,7 @@ dependencies = [
 "checksum scopeguard 1.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "d29ab0c6d3fc0ee92fe66e2d99f700eab17a8d57d1c1d3b748380fb20baa78cd"
 "checksum spinning_top 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "32d801a3a53bcf5071f85fef8d5cab9e5f638fc5580a37e6eb7aba4b37438d24"
 "checksum syn 1.0.33 (registry+https://github.com/rust-lang/crates.io-index)" = "e8d5d96e8cbb005d6959f119f773bfaebb5684296108fb32600c00cde305b2cd"
+"checksum tinypci 0.1.0 (git+https://github.com/trashbyte/tinypci)" = "<none>"
 "checksum uart_16550 0.2.7 (registry+https://github.com/rust-lang/crates.io-index)" = "e58fc40dc1712664fc9b0a7bd8ca2f21ab49960924fb245a80a05e1e92f3dfe9"
 "checksum unicode-xid 0.2.1 (registry+https://github.com/rust-lang/crates.io-index)" = "f7fe0bb3479651439c9112f72b6c505038574c9fbb575ed1bf3b797fa39dd564"
 "checksum volatile 0.2.6 (registry+https://github.com/rust-lang/crates.io-index)" = "6af0edf5b4faacc31fc51159244d78d65ec580f021afcef7bd53c04aeabc7f29"

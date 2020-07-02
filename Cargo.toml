@@ -23,6 +23,7 @@ log = "0.4.8"
 pc-keyboard = "0.5.0"
 pic8259_simple = "0.2.0"
 spinning_top = { version = "0.1.0", features = ["nightly"] }
+tinypci = { git = "https://github.com/trashbyte/tinypci", default-features = false }
 uart_16550 = "0.2.7"
 volatile = "0.2.6"
 x86_64 = "0.11.1"
