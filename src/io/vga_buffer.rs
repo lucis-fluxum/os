@@ -6,6 +6,7 @@ use core::{
 use conquer_once::spin::Lazy;
 use spinning_top::Spinlock;
 use volatile::Volatile;
+use x86_64::instructions::port::Port;
 
 use color::*;
 
@@ -16,6 +17,11 @@ mod tests;
 
 const BUFFER_WIDTH: usize = 80;
 const BUFFER_HEIGHT: usize = 25;
+
+const CRT_ADDR_REGISTER: u16 = 0x3d4;
+const CRT_DATA_REGISTER: u16 = 0x3d5;
+const SET_CURSOR_POS_LOW: u8 = 0x0f;
+const SET_CURSOR_POS_HIGH: u8 = 0x0e;
 
 #[repr(transparent)]
 struct RawVGABuffer {
@@ -59,6 +65,9 @@ impl VGABuffer {
                 _ => self.write_byte(0xfe),
             }
         }
+        if string.len() > 0 {
+            self.update_cursor();
+        }
     }
 
     fn new_line(&mut self) {
@@ -77,6 +86,20 @@ impl VGABuffer {
         self.column_position = 0;
     }
 
+    fn update_cursor(&self) {
+        let mut control_port = Port::new(CRT_ADDR_REGISTER);
+        let mut data_port = Port::new(CRT_DATA_REGISTER);
+        debug_assert!(self.row_position * BUFFER_WIDTH + self.column_position < u16::MAX as usize);
+        let position_bytes =
+            ((self.row_position * BUFFER_WIDTH + self.column_position) as u16).to_le_bytes();
+        unsafe {
+            control_port.write(SET_CURSOR_POS_LOW);
+            data_port.write(position_bytes[0]);
+            control_port.write(SET_CURSOR_POS_HIGH);
+            data_port.write(position_bytes[1]);
+        }
+    }
+
     fn clear_row(&mut self, row: usize) {
         let blank = ColoredChar {
             ascii_character: b' ',
@@ -84,6 +107,12 @@ impl VGABuffer {
         };
         for col in 0..BUFFER_WIDTH {
             self.buffer.chars[row][col].write(blank);
+        }
+    }
+
+    fn clear_screen(&mut self) {
+        for row in 0..BUFFER_HEIGHT {
+            self.clear_row(row);
         }
     }
 }
@@ -96,12 +125,15 @@ impl fmt::Write for VGABuffer {
 }
 
 static VGA_BUFFER: Lazy<Spinlock<VGABuffer>> = Lazy::new(|| {
-    Spinlock::new(VGABuffer {
+    let buffer = Spinlock::new(VGABuffer {
         row_position: 0,
         column_position: 0,
         color_code: ColorCode::new(Color::White, Color::Black),
         buffer: unsafe { &mut *(0xb8000 as *mut RawVGABuffer) },
-    })
+    });
+    // This fills the buffer with white-on-black spaces so the cursor shows up in blank areas
+    buffer.lock().clear_screen();
+    buffer
 });
 
 #[doc(hidden)]
