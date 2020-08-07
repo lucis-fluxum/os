@@ -14,18 +14,22 @@ test-success-exit-code = 33 # Since (0x10 << 1) | 1 = 33
 test-timeout = 300
 
 [dependencies]
-bootloader = { version = "0.9.5", features = ["map_physical_memory"] }
-conquer-once = { version = "0.2.0", default-features = false }
+
+# TODO: Workaround for https://github.com/rust-lang/wg-cargo-std-aware/issues/53
+rlibc = "1.0.0"
+
+bootloader = { version = "0.9.8", features = ["map_physical_memory"] }
+conquer-once = { version = "0.2.1", default-features = false }
 crossbeam-queue = { version = "0.2.3", default-features = false, features = ["alloc"] }
 futures-util = { version = "0.3.5", default-features = false, features = ["alloc"] }
 linked_list_allocator = "0.8.4"
-log = "0.4.8"
-pc-keyboard = "0.5.0"
+log = "0.4.11"
+pc-keyboard = "0.5.1"
 pic8259_simple = "0.2.0"
-spinning_top = { version = "0.1.0", features = ["nightly"] }
+spinning_top = { version = "0.2.1", features = ["nightly"] }
 tinypci = { git = "https://github.com/trashbyte/tinypci", default-features = false }
 uart_16550 = "0.2.7"
-volatile = "0.2.6"
+volatile = "0.3.0"
 x86_64 = "0.11.1"
 
 [[test]]
