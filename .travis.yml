@@ -4,10 +4,10 @@ rust:
 
 before_install:
   - sudo apt-get -y install qemu-system-x86
-  - cargo install cargo-xbuild bootimage
+  # https://github.com/rust-osdev/bootimage/issues/64
+  - (cd .. && cargo install bootimage)
   - rustup component add rust-src llvm-tools-preview
 
 script:
-  - cargo xbuild --verbose --all
-  - cargo xtest --verbose --all
-
+  - cargo build --verbose --all
+  - cargo test --verbose --all

@@ -8,7 +8,7 @@ edition = "2018"
 test-args = [
     "-device", "isa-debug-exit,iobase=0xf4,iosize=0x04",
     "-serial", "stdio", 
-    "-display", "none"
+    "-display", "none",
 ]
 test-success-exit-code = 33 # Since (0x10 << 1) | 1 = 33
 test-timeout = 300
