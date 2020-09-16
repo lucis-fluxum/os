@@ -65,7 +65,7 @@ impl VGABuffer {
                 _ => self.write_byte(0xfe),
             }
         }
-        if string.len() > 0 {
+        if !string.is_empty() {
             self.update_cursor();
         }
     }

@@ -80,6 +80,12 @@ impl<'f> Executor<'f> {
     }
 }
 
+impl<'f> Default for Executor<'f> {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 struct TaskWaker {
     task_id: TaskId,
     task_id_queue: Arc<ArrayQueue<TaskId>>,
