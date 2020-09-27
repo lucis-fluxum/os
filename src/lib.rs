@@ -3,7 +3,7 @@
 #![feature(abi_x86_interrupt)]
 #![feature(custom_test_frameworks)]
 #![feature(alloc_error_handler)]
-#![feature(const_fn)]
+#![feature(const_mut_refs)]
 #![feature(const_in_array_repeat_expressions)]
 #![feature(unsafe_block_in_unsafe_fn)]
 #![deny(unsafe_op_in_unsafe_fn)]
