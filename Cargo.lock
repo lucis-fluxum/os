@@ -20,9 +20,9 @@ checksum = "cf1de2fe8c75bc145a2f577add951f8134889b4795d47466a54a5c846d691693"
 
 [[package]]
 name = "bootloader"
-version = "0.9.8"
+version = "0.9.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0ad686b9b47363de7d36c05fb6885f17d08d0f2d15b1bc782a101fe3c94a2c7c"
+checksum = "8c5c959bf675ba4d842740373760b2aeb5b8f5457451cd18370b4c339d4926e9"
 
 [[package]]
 name = "cfg-if"
@@ -98,9 +98,9 @@ dependencies = [
 
 [[package]]
 name = "linked_list_allocator"
-version = "0.8.4"
+version = "0.8.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e70e46c13c0e8374c26cec5752e3347ca1087d9711de8f45aa513a7700efd73d"
+checksum = "84565678e403453d1a27a0886882b3b271701e65146d972d9d7d9a4c4a0ff498"
 dependencies = [
  "spinning_top 0.1.1",
 ]
@@ -151,7 +151,7 @@ dependencies = [
  "pc-keyboard",
  "pic8259_simple",
  "rlibc",
- "spinning_top 0.2.1",
+ "spinning_top 0.2.2",
  "tinypci",
  "uart_16550",
  "volatile",
@@ -240,9 +240,9 @@ dependencies = [
 
 [[package]]
 name = "spinning_top"
-version = "0.2.1"
+version = "0.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3ae8ba8ba35ec6c69da715181fb4b5451c3974b997596c0443d0bbc18c8cf6cd"
+checksum = "7e529d73e80d64b5f2631f9035113347c578a1c9c7774b83a2b880788459ab36"
 dependencies = [
  "lock_api 0.4.1",
 ]
@@ -265,9 +265,9 @@ source = "git+https://github.com/trashbyte/tinypci#f1afba83f809210cfed8630d284ce
 
 [[package]]
 name = "uart_16550"
-version = "0.2.7"
+version = "0.2.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e58fc40dc1712664fc9b0a7bd8ca2f21ab49960924fb245a80a05e1e92f3dfe9"
+checksum = "74cba8625e8a1ec064fc6440aef7921ff21b06f1ed60dd603cb1b1d5e0dfcd46"
 dependencies = [
  "bitflags",
  "x86_64",
@@ -287,9 +287,9 @@ checksum = "f8e76fae08f03f96e166d2dfda232190638c10e0383841252416f9cfe2ae60e6"
 
 [[package]]
 name = "x86_64"
-version = "0.11.1"
+version = "0.12.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9144cdef072afe8afcbc511be8f421de5b3eb9f4b8ff7abff369bee38f91e7e3"
+checksum = "238a5798f77641af3c4f242bf985807f312a480cd4e35ed7255fad4b2ccb9d4f"
 dependencies = [
  "bit_field",
  "bitflags",
