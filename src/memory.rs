@@ -20,7 +20,6 @@ static HEAP_ALLOCATOR: Mutex<FixedSizeBlockAllocator> = Mutex::new(FixedSizeBloc
 
 #[alloc_error_handler]
 fn alloc_error_handler(layout: Layout) -> ! {
-    // TODO: I don't like panicking here, maybe think of something else
     panic!("allocation error: {:?}", layout);
 }
 
