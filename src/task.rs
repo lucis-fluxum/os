@@ -9,15 +9,14 @@ use core::{
 use futures_util::StreamExt;
 use pc_keyboard::DecodedKey;
 
+use self::scancode_queue::ScancodeQueue;
 use crate::{keyboard, print};
+
+pub use self::{basic_executor::BasicExecutor, executor::Executor};
 
 mod basic_executor;
 mod executor;
 pub(crate) mod scancode_queue;
-
-pub use basic_executor::BasicExecutor;
-pub use executor::Executor;
-use scancode_queue::ScancodeQueue;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 struct TaskId(u64);

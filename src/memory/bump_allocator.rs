@@ -1,8 +1,7 @@
 use alloc::alloc::{GlobalAlloc, Layout};
 use core::ptr;
 
-use super::align_up;
-use crate::sync::Mutex;
+use crate::{memory::align_up, sync::Mutex};
 
 pub struct BumpAllocator {
     heap_start: usize,

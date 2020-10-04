@@ -6,8 +6,11 @@ use x86_64::{
     structures::idt::{InterruptStackFrame, PageFaultErrorCode},
 };
 
-use super::{InterruptIndex, PICS};
-use crate::{keyboard, task::scancode_queue::ScancodeQueue};
+use crate::{
+    interrupt::{InterruptIndex, PICS},
+    keyboard,
+    task::scancode_queue::ScancodeQueue,
+};
 
 /// Breakpoint exception handler. Currently, this just logs the exception and continues.
 pub extern "x86-interrupt" fn breakpoint_handler(stack_frame: &mut InterruptStackFrame) {

@@ -3,19 +3,21 @@ use alloc::alloc::Layout;
 use bootloader::BootInfo;
 use x86_64::VirtAddr;
 
+use crate::sync::Mutex;
+
+pub use self::{
+    bump_allocator::BumpAllocator,
+    fixed_size_block_allocator::FixedSizeBlockAllocator,
+    frame_allocator::BootInfoFrameAllocator,
+    heap::{HEAP_SIZE, HEAP_START},
+    linked_list_allocator::LinkedListAllocator,
+};
+
 mod bump_allocator;
 mod fixed_size_block_allocator;
 mod frame_allocator;
 mod heap;
 mod linked_list_allocator;
-
-use crate::sync::Mutex;
-
-pub use self::linked_list_allocator::LinkedListAllocator;
-pub use bump_allocator::BumpAllocator;
-pub use fixed_size_block_allocator::FixedSizeBlockAllocator;
-pub use frame_allocator::BootInfoFrameAllocator;
-pub use heap::{HEAP_SIZE, HEAP_START};
 
 #[global_allocator]
 static HEAP_ALLOCATOR: Mutex<FixedSizeBlockAllocator> = Mutex::new(FixedSizeBlockAllocator::new());

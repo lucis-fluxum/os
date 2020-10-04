@@ -7,7 +7,7 @@ use core::{
 use crossbeam_queue::ArrayQueue;
 use x86_64::instructions::interrupts::{self, enable_interrupts_and_hlt};
 
-use super::{Task, TaskId};
+use crate::task::{Task, TaskId};
 
 const TASK_ID_QUEUE_SIZE: usize = 100;
 

@@ -5,7 +5,7 @@ use core::{
     task::{Context, Poll, RawWaker, RawWakerVTable, Waker},
 };
 
-use super::Task;
+use crate::task::Task;
 
 pub struct BasicExecutor<'f> {
     task_queue: VecDeque<Task<'f>>,

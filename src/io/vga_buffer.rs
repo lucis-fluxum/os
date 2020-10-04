@@ -7,12 +7,10 @@ use conquer_once::spin::Lazy;
 use volatile::Volatile;
 use x86_64::instructions::port::Port;
 
-use {crate::sync::Mutex, color::*};
+use self::color::*;
+use crate::sync::Mutex;
 
 pub(crate) mod color;
-
-#[cfg(test)]
-mod tests;
 
 const BUFFER_WIDTH: usize = 80;
 const BUFFER_HEIGHT: usize = 25;
@@ -154,4 +152,40 @@ pub fn _print_colored(args: fmt::Arguments, color_code: ColorCode) {
         writer.write_fmt(args).unwrap();
         let _ = mem::replace(&mut writer.color_code, old_color_code);
     });
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::println;
+
+    #[test_case]
+    fn test_vga_buffer_println_single() {
+        println!("test_vga_buffer_println_single output");
+    }
+
+    #[test_case]
+    fn test_vga_buffer_println_many() {
+        for _ in 0..200 {
+            println!("test_vga_buffer_println_many output");
+        }
+    }
+
+    #[test_case]
+    fn test_vga_buffer_println_bytes_match() {
+        let s = "Some test string that fits on a single line";
+
+        // Avoid deadlocks in case an interrupt occurs while VGA_BUFFER is locked
+        x86_64::instructions::interrupts::without_interrupts(|| {
+            let mut writer = VGA_BUFFER.lock();
+            // Use writeln since we've already locked VGA_BUFFER. Also, print a newline before the
+            // test string so any existing text on the current line is removed.
+            writeln!(writer, "\n{}", s).unwrap();
+            let row_pos = writer.row_position;
+            for (i, c) in s.bytes().enumerate() {
+                let screen_char: ColoredChar = writer.buffer.chars[row_pos - 1][i].read();
+                assert_eq!(screen_char.ascii_character, c);
+            }
+        });
+    }
 }
