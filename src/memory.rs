@@ -9,6 +9,8 @@ mod frame_allocator;
 mod heap;
 mod linked_list_allocator;
 
+use crate::sync::Mutex;
+
 pub use self::linked_list_allocator::LinkedListAllocator;
 pub use bump_allocator::BumpAllocator;
 pub use fixed_size_block_allocator::FixedSizeBlockAllocator;
@@ -41,17 +43,4 @@ fn align_up(addr: usize, alignment: usize) -> usize {
     assert!(alignment.count_ones() == 1);
     // Round addr + alignment - 1 down to the nearest multiple of alignment
     (addr + alignment - 1) & !(alignment - 1)
-}
-
-/// A wrapper around `spinning_top::Spinlock` to permit trait implementations.
-pub struct Mutex<T>(spinning_top::Spinlock<T>);
-
-impl<T> Mutex<T> {
-    pub const fn new(inner: T) -> Self {
-        Self(spinning_top::Spinlock::new(inner))
-    }
-
-    pub fn lock(&self) -> spinning_top::SpinlockGuard<T> {
-        self.0.lock()
-    }
 }

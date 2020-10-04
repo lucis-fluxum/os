@@ -4,11 +4,10 @@ use core::{
 };
 
 use conquer_once::spin::Lazy;
-use spinning_top::Spinlock;
 use volatile::Volatile;
 use x86_64::instructions::port::Port;
 
-use color::*;
+use {crate::sync::Mutex, color::*};
 
 pub(crate) mod color;
 
@@ -124,8 +123,8 @@ impl fmt::Write for VGABuffer {
     }
 }
 
-static VGA_BUFFER: Lazy<Spinlock<VGABuffer>> = Lazy::new(|| {
-    let buffer = Spinlock::new(VGABuffer {
+static VGA_BUFFER: Lazy<Mutex<VGABuffer>> = Lazy::new(|| {
+    let buffer = Mutex::new(VGABuffer {
         row_position: 0,
         column_position: 0,
         color_code: ColorCode::new(Color::White, Color::Black),

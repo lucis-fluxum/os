@@ -1,6 +1,8 @@
-use super::{align_up, Mutex};
 use alloc::alloc::{GlobalAlloc, Layout};
 use core::{mem, ptr};
+
+use super::align_up;
+use crate::sync::Mutex;
 
 struct FreeListNode {
     size: usize,

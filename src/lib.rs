@@ -26,6 +26,7 @@ pub mod keyboard;
 pub mod logging;
 pub mod memory;
 pub mod qemu;
+pub mod sync;
 pub mod task;
 pub mod testing;
 

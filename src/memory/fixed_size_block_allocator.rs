@@ -4,7 +4,7 @@ use core::{
     ptr::{self, NonNull},
 };
 
-use super::Mutex;
+use crate::sync::Mutex;
 
 /// The block sizes to use.
 ///

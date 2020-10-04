@@ -2,10 +2,9 @@
 
 use conquer_once::spin::Lazy;
 use pic8259_simple::ChainedPics;
-use spinning_top::Spinlock;
 use x86_64::structures::idt::InterruptDescriptorTable;
 
-use crate::gdt;
+use crate::{gdt, sync::Mutex};
 
 pub mod handlers;
 
@@ -40,8 +39,8 @@ static IDT: Lazy<InterruptDescriptorTable> = Lazy::new(|| {
     table
 });
 
-static PICS: Lazy<Spinlock<ChainedPics>> =
-    Lazy::new(|| Spinlock::new(unsafe { ChainedPics::new(PIC_1_OFFSET, PIC_2_OFFSET) }));
+static PICS: Lazy<Mutex<ChainedPics>> =
+    Lazy::new(|| Mutex::new(unsafe { ChainedPics::new(PIC_1_OFFSET, PIC_2_OFFSET) }));
 
 pub fn initialize_interrupt_descriptor_table() {
     IDT.load();
