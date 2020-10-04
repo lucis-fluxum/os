@@ -160,19 +160,19 @@ mod tests {
     use crate::println;
 
     #[test_case]
-    fn test_vga_buffer_println_single() {
-        println!("test_vga_buffer_println_single output");
+    fn test_vga_println_single() {
+        println!("test_vga_println_single output");
     }
 
     #[test_case]
-    fn test_vga_buffer_println_many() {
+    fn test_vga_println_many() {
         for _ in 0..200 {
-            println!("test_vga_buffer_println_many output");
+            println!("test_vga_println_many output");
         }
     }
 
     #[test_case]
-    fn test_vga_buffer_println_bytes_match() {
+    fn test_vga_println_bytes_match() {
         let s = "Some test string that fits on a single line";
 
         // Avoid deadlocks in case an interrupt occurs while VGA_BUFFER is locked

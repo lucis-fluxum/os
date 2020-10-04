@@ -1,12 +1,12 @@
 #[macro_export]
 macro_rules! print {
-    ($($arg:tt)*) => ($crate::io::vga_buffer::_print(format_args!($($arg)*)));
+    ($($arg:tt)*) => ($crate::io::vga::_print(format_args!($($arg)*)));
 }
 
 #[macro_export]
 macro_rules! print_colored {
     ($color:expr, $($arg:tt)*) =>
-        ($crate::io::vga_buffer::_print_colored(format_args!($($arg)*), $color));
+        ($crate::io::vga::_print_colored(format_args!($($arg)*), $color));
 }
 
 #[macro_export]

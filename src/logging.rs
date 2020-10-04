@@ -2,7 +2,7 @@
 
 use log::{Level, LevelFilter, Log, Metadata, Record};
 
-use crate::io::vga_buffer::color::*;
+use crate::io::vga::color::*;
 
 /// A structure implementing [`Log`] that prints to the VGA text buffer.
 pub struct GlobalLogger;
