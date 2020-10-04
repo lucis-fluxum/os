@@ -14,11 +14,7 @@ test-success-exit-code = 33 # Since (0x10 << 1) | 1 = 33
 test-timeout = 300
 
 [dependencies]
-
-# TODO: Workaround for https://github.com/rust-lang/wg-cargo-std-aware/issues/53
-rlibc = "1.0.0"
-
-bootloader = { version = "0.9.10", features = ["map_physical_memory"] }
+bootloader = { version = "0.9.11", features = ["map_physical_memory"] }
 conquer-once = { version = "0.2.1", default-features = false }
 crossbeam-queue = { version = "0.2.3", default-features = false, features = ["alloc"] }
 futures-util = { version = "0.3.5", default-features = false, features = ["alloc"] }
@@ -28,10 +24,10 @@ pc-keyboard = "0.5.1"
 pic8259_simple = "0.2.0"
 spinning_top = { version = "0.2.2", features = ["nightly"] }
 tinypci = { git = "https://github.com/trashbyte/tinypci", default-features = false }
-uart_16550 = "0.2.8"
+uart_16550 = "0.2.10"
 # TODO: volatile 0.4.0 is rewritten to use references instead of owned values
 volatile = "0.3.0"
-x86_64 = "0.12.1"
+x86_64 = "0.12.2"
 
 [[test]]
 name = "should_panic"

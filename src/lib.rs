@@ -12,7 +12,6 @@
 #![reexport_test_harness_main = "test_main"]
 
 extern crate alloc;
-extern crate rlibc;
 
 #[cfg(test)]
 use bootloader::entry_point;
