@@ -26,7 +26,10 @@ impl ScancodeQueue {
                 .unwrap_or_else(|_| warn!("Scancode queue is full; dropping keyboard input"));
             WAKER.wake();
         } else {
-            warn!("Scancode queue is uninitialized!");
+            warn!(
+                "Couldn't add scancode {:#x}: queue is uninitialized!",
+                scancode
+            );
         }
     }
 }

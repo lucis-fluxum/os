@@ -16,7 +16,7 @@ extern crate alloc;
 #[cfg(test)]
 use bootloader::entry_point;
 use bootloader::BootInfo;
-use log::info;
+use log::{debug, info};
 
 pub mod gdt;
 pub mod interrupt;
@@ -60,6 +60,8 @@ pub fn initialize(boot_info: &'static BootInfo) {
     interrupt::initialize_interrupt_controller();
     info!("  - heap allocator");
     memory::initialize_heap_allocator(boot_info);
+    info!("  - PS/2 keyboard");
+    keyboard::initialize_ps2_controller();
     info!("Initialization complete.");
 
     for device_info in tinypci::brute_force_scan() {
