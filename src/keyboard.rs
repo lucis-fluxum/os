@@ -38,20 +38,10 @@ pub fn initialize_ps2_controller() {
     // We're doing low-level PS/2 controller commands and don't want to be interrupted
     x86_64::instructions::interrupts::without_interrupts(|| {
         debug!("Keyboard controller status: {:#010b}", controller.status());
-        debug!("Rebooting PS/2 controller");
-        controller.device_command(0xff, None);
-        controller.read_data();
-        debug_assert_eq!(controller.read_data(), 0xaa);
+        debug!("Controller self-test");
+        controller.controller_command(0xaa, None);
+        debug!("> {:#x}", controller.read_data());
         debug!("Disabling scancode set 1 translation");
         controller.controller_command(0x60, Some(0x21));
-        debug!("Setting scancode 2");
-        controller.device_command(0xf0, Some(2));
-        controller.read_data();
-        controller.read_data();
-        debug!("Getting scancode");
-        controller.device_command(0xf0, Some(0));
-        controller.read_data();
-        controller.read_data();
-        debug_assert_eq!(controller.read_data(), 2);
     });
 }
