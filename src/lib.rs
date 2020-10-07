@@ -16,7 +16,7 @@ extern crate alloc;
 #[cfg(test)]
 use bootloader::entry_point;
 use bootloader::BootInfo;
-use log::{debug, info};
+use log::info;
 
 pub mod gdt;
 pub mod interrupt;

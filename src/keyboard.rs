@@ -2,7 +2,7 @@
 
 use conquer_once::spin::Lazy;
 use log::debug;
-use pc_keyboard::{layouts, DecodedKey, Error, HandleControl, Keyboard, ScancodeSet1};
+use pc_keyboard::{layouts, DecodedKey, Error, HandleControl, Keyboard, ScancodeSet2};
 use x86_64::instructions::port::Port;
 
 use self::ps2::PS2Controller;
@@ -10,10 +10,10 @@ use crate::sync::Mutex;
 
 mod ps2;
 
-static KEYBOARD: Lazy<Mutex<Keyboard<layouts::Us104Key, ScancodeSet1>>> = Lazy::new(|| {
+static KEYBOARD: Lazy<Mutex<Keyboard<layouts::Us104Key, ScancodeSet2>>> = Lazy::new(|| {
     Mutex::new(Keyboard::new(
         layouts::Us104Key,
-        ScancodeSet1,
+        ScancodeSet2,
         HandleControl::Ignore,
     ))
 });
@@ -34,36 +34,24 @@ pub fn decode_key(scancode: u8) -> Result<Option<DecodedKey>, Error> {
 }
 
 pub fn initialize_ps2_controller() {
+    let mut controller = PS2Controller::new();
     // We're doing low-level PS/2 controller commands and don't want to be interrupted
     x86_64::instructions::interrupts::without_interrupts(|| {
-        let mut controller = PS2Controller::new();
-        debug!("disabling scanning");
-        controller.device_command(0xf5, None);
-        debug!(
-            "read data: {:#x}, (status {:#010b})",
-            controller.read_data(),
-            controller.status()
-        );
-
-        debug!("status: {:#010b}", controller.status());
-        controller.device_command(0xf2, None);
-        debug!("sent cmd");
-        for _ in 0..3 {
-            let data = controller.read_data();
-            debug!(
-                "read data: {:#x} ({:#010b}), (status {:#010b})",
-                data,
-                data,
-                controller.status()
-            );
-        }
-
-        debug!("re-enabling scanning");
-        controller.device_command(0xf4, None);
-        debug!(
-            "read data: {:#x}, (status {:#010b})",
-            controller.read_data(),
-            controller.status()
-        );
+        debug!("Keyboard controller status: {:#010b}", controller.status());
+        debug!("Rebooting PS/2 controller");
+        controller.device_command(0xff, None);
+        controller.read_data();
+        debug_assert_eq!(controller.read_data(), 0xaa);
+        debug!("Disabling scancode set 1 translation");
+        controller.controller_command(0x60, Some(0x21));
+        debug!("Setting scancode 2");
+        controller.device_command(0xf0, Some(2));
+        controller.read_data();
+        controller.read_data();
+        debug!("Getting scancode");
+        controller.device_command(0xf0, Some(0));
+        controller.read_data();
+        controller.read_data();
+        debug_assert_eq!(controller.read_data(), 2);
     });
 }

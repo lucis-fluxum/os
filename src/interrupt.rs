@@ -13,11 +13,26 @@ pub const PIC_1_OFFSET: u8 = 32;
 /// The second PIC starts 8 positions away from the first.
 pub const PIC_2_OFFSET: u8 = PIC_1_OFFSET + 8;
 
+#[allow(dead_code)]
 #[derive(Debug, Clone, Copy)]
 #[repr(u8)]
 pub(crate) enum InterruptIndex {
     Timer = PIC_1_OFFSET,
     Keyboard,
+    Secondary,
+    Serial2Or4,
+    Serial1Or3,
+    SoundOrParallel2And3,
+    FloppyDisk,
+    Parallel1,
+    RealTimeClock,
+    ACPI,
+    Open1,
+    Open2,
+    Mouse,
+    Coprocessor,
+    PrimaryATA,
+    SecondaryATA,
 }
 
 static IDT: Lazy<InterruptDescriptorTable> = Lazy::new(|| {
