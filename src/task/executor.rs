@@ -5,7 +5,7 @@ use core::{
 };
 
 use crossbeam_queue::ArrayQueue;
-use x86_64::instructions::interrupts::{self, enable_interrupts_and_hlt};
+use x86_64::instructions::interrupts::{self, enable_and_hlt};
 
 use crate::task::{Task, TaskId};
 
@@ -46,7 +46,7 @@ impl<'f> Executor<'f> {
             // Interrupts may occur after polling tasks, so carefully check the queue
             interrupts::disable();
             if self.task_id_queue.is_empty() {
-                enable_interrupts_and_hlt();
+                enable_and_hlt();
             } else {
                 interrupts::enable();
             }

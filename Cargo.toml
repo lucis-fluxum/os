@@ -22,6 +22,7 @@ linked_list_allocator = "0.8.6"
 log = "0.4.11"
 pc-keyboard = "0.5.1"
 pic8259_simple = "0.2.0"
+ps2 = { path = "../ps2-rs" }
 spinning_top = { version = "0.2.2", features = ["nightly"] }
 tinypci = { git = "https://github.com/trashbyte/tinypci", default-features = false }
 uart_16550 = "0.2.10"
