@@ -15,14 +15,14 @@ test-timeout = 300
 
 [dependencies]
 bootloader = { version = "0.9.11", features = ["map_physical_memory"] }
-conquer-once = { version = "0.2.1", default-features = false }
-crossbeam-queue = { version = "0.2.3", default-features = false, features = ["alloc"] }
+conquer-once = { version = "0.3.1", default-features = false }
+crossbeam-queue = { version = "0.3.1", default-features = false, features = ["alloc", "nightly"] }
 futures-util = { version = "0.3.5", default-features = false, features = ["alloc"] }
 linked_list_allocator = "0.8.6"
 log = "0.4.11"
 pc-keyboard = "0.5.1"
 pic8259_simple = "0.2.0"
-ps2 = { path = "../ps2-rs" }
+ps2 = { path = "../ps2-rs", version = "0.1.0" }
 spinning_top = { version = "0.2.2", features = ["nightly"] }
 tinypci = { git = "https://github.com/trashbyte/tinypci", default-features = false }
 uart_16550 = "0.2.10"

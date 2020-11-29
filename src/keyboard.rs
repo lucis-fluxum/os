@@ -1,14 +1,11 @@
 //! Reading input from the keyboard.
 
 use conquer_once::spin::Lazy;
-use log::debug;
 use pc_keyboard::{layouts, DecodedKey, Error, HandleControl, Keyboard, ScancodeSet2};
+use ps2::{flags::ControllerConfigFlags, Controller};
 use x86_64::instructions::port::Port;
 
-use self::ps2::PS2Controller;
 use crate::sync::Mutex;
-
-mod ps2;
 
 static KEYBOARD: Lazy<Mutex<Keyboard<layouts::Us104Key, ScancodeSet2>>> = Lazy::new(|| {
     Mutex::new(Keyboard::new(
@@ -34,14 +31,31 @@ pub fn decode_key(scancode: u8) -> Result<Option<DecodedKey>, Error> {
 }
 
 pub fn initialize_ps2_controller() {
-    let mut controller = PS2Controller::new();
     // We're doing low-level PS/2 controller commands and don't want to be interrupted
     x86_64::instructions::interrupts::without_interrupts(|| {
-        debug!("Keyboard controller status: {:#010b}", controller.status());
-        debug!("Controller self-test");
-        controller.controller_command(0xaa, None);
-        debug!("> {:#x}", controller.read_data());
-        debug!("Disabling scancode set 1 translation");
-        controller.controller_command(0x60, Some(0x21));
+        let mut controller = unsafe { Controller::new() };
+        controller
+            .write_config(ControllerConfigFlags::SET_SYSTEM_FLAG)
+            .unwrap();
+
+        // TODO: This initialization process only seems to work on QEMU
+
+        controller.enable_keyboard().unwrap();
+        let mut keyboard = controller.keyboard();
+        keyboard.set_defaults().unwrap();
+        keyboard.enable_scanning().unwrap();
+
+        controller.enable_mouse().unwrap();
+        let mut mouse = controller.mouse();
+        mouse.set_defaults().unwrap();
+        mouse.enable_data_reporting().unwrap();
+
+        controller
+            .write_config(
+                ControllerConfigFlags::ENABLE_KEYBOARD_INTERRUPT
+                    | ControllerConfigFlags::ENABLE_MOUSE_INTERRUPT
+                    | ControllerConfigFlags::SET_SYSTEM_FLAG,
+            )
+            .unwrap();
     });
 }

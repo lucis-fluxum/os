@@ -59,3 +59,19 @@ pub extern "x86-interrupt" fn keyboard_handler(_stack_frame: &mut InterruptStack
             .notify_end_of_interrupt(InterruptIndex::Keyboard as u8);
     }
 }
+
+pub extern "x86-interrupt" fn mouse_handler(_stack_frame: &mut InterruptStackFrame) {
+    let mut controller = unsafe { ps2::Controller::new() };
+    // TODO: Two interrupts seem to be triggered on each event, but the second one doesn't have
+    //       a data packet available to read. What's going on?
+    match controller.mouse().read_data_packet() {
+        Ok(packet) => log::debug!("Mouse event: {:?}", packet),
+        // Ignore events missing packets for now
+        Err(_) => {}
+    }
+
+    unsafe {
+        PICS.lock()
+            .notify_end_of_interrupt(InterruptIndex::Mouse as u8);
+    }
+}

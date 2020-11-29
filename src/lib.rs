@@ -60,7 +60,7 @@ pub fn initialize(boot_info: &'static BootInfo) {
     interrupt::initialize_interrupt_controller();
     info!("  - heap allocator");
     memory::initialize_heap_allocator(boot_info);
-    info!("  - PS/2 keyboard");
+    info!("  - PS/2 controller");
     keyboard::initialize_ps2_controller();
     info!("Initialization complete.");
 

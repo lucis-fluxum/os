@@ -4,7 +4,7 @@ use core::{
 };
 
 use conquer_once::spin::Lazy;
-use crossbeam_queue::{ArrayQueue, PopError};
+use crossbeam_queue::ArrayQueue;
 use futures_util::{stream::Stream, task::AtomicWaker};
 use log::warn;
 
@@ -38,18 +38,18 @@ impl Stream for ScancodeQueue {
     type Item = u8;
 
     fn poll_next(self: Pin<&mut Self>, context: &mut Context) -> Poll<Option<u8>> {
-        if let Ok(scancode) = SCANCODE_QUEUE.pop() {
+        if let Some(scancode) = SCANCODE_QUEUE.pop() {
             return Poll::Ready(Some(scancode));
         }
 
         WAKER.register(&context.waker());
 
         match SCANCODE_QUEUE.pop() {
-            Ok(scancode) => {
+            Some(scancode) => {
                 WAKER.take();
                 Poll::Ready(Some(scancode))
             }
-            Err(PopError) => Poll::Pending,
+            None => Poll::Pending,
         }
     }
 }
