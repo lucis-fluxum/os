@@ -8,7 +8,6 @@ use x86_64::{
 
 use crate::{
     interrupt::{InterruptIndex, PICS},
-    keyboard,
     task::scancode_queue::ScancodeQueue,
 };
 
@@ -52,7 +51,8 @@ pub extern "x86-interrupt" fn timer_handler(_stack_frame: &mut InterruptStackFra
 /// Keyboard handler. This adds the scancode of any key pressed onto the global scancode
 /// queue, which is later read by an asynchronous task.
 pub extern "x86-interrupt" fn keyboard_handler(_stack_frame: &mut InterruptStackFrame) {
-    ScancodeQueue::add_scancode(keyboard::read_scancode());
+    // TODO: Make sure timeout doesn't cause spurious panics
+    ScancodeQueue::add_scancode(unsafe { ps2::Controller::new().read_data().unwrap() });
 
     unsafe {
         PICS.lock()

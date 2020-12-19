@@ -61,7 +61,7 @@ pub fn initialize(boot_info: &'static BootInfo) {
     info!("  - heap allocator");
     memory::initialize_heap_allocator(boot_info);
     info!("  - PS/2 controller");
-    keyboard::initialize_ps2_controller();
+    keyboard::initialize_ps2_controller().unwrap();
     info!("Initialization complete.");
 
     for device_info in tinypci::brute_force_scan() {
