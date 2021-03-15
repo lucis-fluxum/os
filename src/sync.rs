@@ -8,7 +8,7 @@ impl<T> Mutex<T> {
         Self(Spinlock::new(inner))
     }
 
-    pub fn lock(&self) -> SpinlockGuard<T> {
+    pub fn lock(&self) -> SpinlockGuard<'_, T> {
         self.0.lock()
     }
 }

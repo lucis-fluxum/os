@@ -134,7 +134,7 @@ static VGA_BUFFER: Lazy<Mutex<VGABuffer>> = Lazy::new(|| {
 });
 
 #[doc(hidden)]
-pub fn _print(args: fmt::Arguments) {
+pub fn _print(args: fmt::Arguments<'_>) {
     // Disable interrupts to prevent deadlock if an interrupt handler tries to print something
     // while VGA_BUFFER is locked
     x86_64::instructions::interrupts::without_interrupts(|| {
@@ -143,7 +143,7 @@ pub fn _print(args: fmt::Arguments) {
 }
 
 #[doc(hidden)]
-pub fn _print_colored(args: fmt::Arguments, color_code: ColorCode) {
+pub fn _print_colored(args: fmt::Arguments<'_>, color_code: ColorCode) {
     // Disable interrupts to prevent deadlock if an interrupt handler tries to print something
     // while VGA_BUFFER is locked
     x86_64::instructions::interrupts::without_interrupts(|| {

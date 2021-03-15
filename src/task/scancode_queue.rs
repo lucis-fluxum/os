@@ -37,7 +37,7 @@ impl ScancodeQueue {
 impl Stream for ScancodeQueue {
     type Item = u8;
 
-    fn poll_next(self: Pin<&mut Self>, context: &mut Context) -> Poll<Option<u8>> {
+    fn poll_next(self: Pin<&mut Self>, context: &mut Context<'_>) -> Poll<Option<u8>> {
         if let Some(scancode) = SCANCODE_QUEUE.pop() {
             return Poll::Ready(Some(scancode));
         }

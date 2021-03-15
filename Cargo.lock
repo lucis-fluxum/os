@@ -148,7 +148,7 @@ dependencies = [
  "tinypci",
  "uart_16550",
  "volatile",
- "x86_64 0.13.2",
+ "x86_64",
 ]
 
 [[package]]
@@ -183,7 +183,7 @@ name = "ps2"
 version = "0.1.1"
 dependencies = [
  "bitflags",
- "x86_64 0.12.4",
+ "x86_64",
 ]
 
 [[package]]
@@ -222,7 +222,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8d45a3c9181dc9ba7d35d02b3c36d1604155289d935b7946510fb3d2f4b976d9"
 dependencies = [
  "bitflags",
- "x86_64 0.13.2",
+ "x86_64",
 ]
 
 [[package]]
@@ -230,16 +230,6 @@ name = "volatile"
 version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f8e76fae08f03f96e166d2dfda232190638c10e0383841252416f9cfe2ae60e6"
-
-[[package]]
-name = "x86_64"
-version = "0.12.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8f3a6840d540b8dbe400f4ed5afe5816105ee5edebe485299a761d0d8b43cef7"
-dependencies = [
- "bit_field",
- "bitflags",
-]
 
 [[package]]
 name = "x86_64"

@@ -34,8 +34,11 @@ pub struct FixedSizeBlockAllocator {
 impl FixedSizeBlockAllocator {
     /// Creates an empty FixedSizeBlockAllocator.
     pub const fn new() -> Self {
+        // This constant is needed because Option<&'static mut Block> doesn't impl Copy, which
+        // means it can't be used as a non-const value to initialize an array
+        const EMPTY: Option<&'static mut Block> = None;
         Self {
-            list_heads: [None; BLOCK_SIZES.len()],
+            list_heads: [EMPTY; BLOCK_SIZES.len()],
             fallback_allocator: linked_list_allocator::Heap::empty(),
         }
     }

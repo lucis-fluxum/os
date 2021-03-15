@@ -41,7 +41,7 @@ impl<'f> Task<'f> {
         }
     }
 
-    fn poll(&mut self, context: &mut Context) -> Poll<()> {
+    fn poll(&mut self, context: &mut Context<'_>) -> Poll<()> {
         self.future.as_mut().poll(context)
     }
 }

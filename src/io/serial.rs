@@ -12,7 +12,7 @@ static SERIAL1: Lazy<Mutex<SerialPort>> = Lazy::new(|| {
 });
 
 #[doc(hidden)]
-pub fn _print(args: fmt::Arguments) {
+pub fn _print(args: fmt::Arguments<'_>) {
     use core::fmt::Write;
     SERIAL1
         .lock()

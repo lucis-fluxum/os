@@ -64,10 +64,10 @@ pub extern "x86-interrupt" fn mouse_handler(_stack_frame: &mut InterruptStackFra
     let mut controller = unsafe { ps2::Controller::new() };
     // TODO: Two interrupts seem to be triggered on each event, but the second one doesn't have
     //       a data packet available to read. What's going on?
-    match controller.mouse().read_data_packet() {
-        Ok(packet) => log::debug!("Mouse event: {:?}", packet),
-        // Ignore events missing packets for now
-        Err(_) => {}
+    if let Ok(packet) = controller.mouse().read_data_packet() {
+        log::debug!("Mouse event: {:?}", packet);
+    } else {
+        // TODO: Handle events missing packets
     }
 
     unsafe {

@@ -26,7 +26,7 @@ pub(crate) enum InterruptIndex {
     FloppyDisk,
     Parallel1,
     RealTimeClock,
-    ACPI,
+    Acpi,
     Open1,
     Open2,
     Mouse,

@@ -22,7 +22,7 @@ pub fn test_runner(tests: &[&dyn Test]) {
     qemu::exit(qemu::ExitCode::Success);
 }
 
-pub fn test_panic_handler(info: &PanicInfo) -> ! {
+pub fn test_panic_handler(info: &PanicInfo<'_>) -> ! {
     serial_println!("[fail]\n");
     serial_println!("Error: {}\n", info);
     qemu::exit(qemu::ExitCode::Failed);

@@ -4,10 +4,8 @@
 #![feature(custom_test_frameworks)]
 #![feature(alloc_error_handler)]
 #![feature(const_mut_refs)]
-#![feature(const_in_array_repeat_expressions)]
-#![feature(unsafe_block_in_unsafe_fn)]
+#![warn(rust_2018_idioms)]
 #![deny(unsafe_op_in_unsafe_fn)]
-#![feature(wake_trait)]
 #![test_runner(crate::testing::test_runner)]
 #![reexport_test_harness_main = "test_main"]
 
@@ -32,7 +30,7 @@ pub mod testing;
 
 #[cfg(test)]
 #[panic_handler]
-fn panic(info: &core::panic::PanicInfo) -> ! {
+fn panic(info: &core::panic::PanicInfo<'_>) -> ! {
     testing::test_panic_handler(info)
 }
 

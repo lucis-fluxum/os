@@ -17,12 +17,12 @@ pub fn initialize_logging() {
 }
 
 impl Log for GlobalLogger {
-    fn enabled(&self, _metadata: &Metadata) -> bool {
+    fn enabled(&self, _metadata: &Metadata<'_>) -> bool {
         true
     }
 
     // TODO: Does creating color codes on the fly have a significant performance impact?
-    fn log(&self, record: &Record) {
+    fn log(&self, record: &Record<'_>) {
         match record.level() {
             Level::Trace => {
                 crate::print_colored!(ColorCode::new(Color::Green, Color::Black), "TRACE > ")
