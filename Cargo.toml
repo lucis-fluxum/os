@@ -14,21 +14,21 @@ test-success-exit-code = 33 # Since (0x10 << 1) | 1 = 33
 test-timeout = 300
 
 [dependencies]
-bootloader = { version = "0.9.16", features = ["map_physical_memory"] }
+bootloader = { version = "0.9.17", features = ["map_physical_memory"] }
 conquer-once = { version = "0.3.2", default-features = false }
 crossbeam-queue = { version = "0.3.1", default-features = false, features = ["alloc", "nightly"] }
-futures-util = { version = "0.3.13", default-features = false, features = ["alloc"] }
-linked_list_allocator = "0.8.11"
+futures-util = { version = "0.3.14", default-features = false, features = ["alloc"] }
+linked_list_allocator = "0.9.0"
 log = "0.4.14"
 pc-keyboard = "0.5.1"
 pic8259_simple = "0.2.0"
 ps2 = { path = "../ps2-rs", version = "0.1.1" }
-spinning_top = { version = "0.2.2", features = ["nightly"] }
+spinning_top = { version = "0.2.3", features = ["nightly"] }
 tinypci = { git = "https://github.com/trashbyte/tinypci", default-features = false }
-uart_16550 = "0.2.12"
+uart_16550 = "0.2.13"
 # TODO: volatile 0.4.0 is rewritten to use references instead of owned values
 volatile = "0.3.0"
-x86_64 = "0.13.2"
+x86_64 = "0.13.6"
 
 [[test]]
 name = "should_panic"
