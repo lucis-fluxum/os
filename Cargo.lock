@@ -139,7 +139,7 @@ dependencies = [
  "tinypci",
  "uart_16550",
  "volatile 0.3.0",
- "x86_64 0.13.6",
+ "x86_64 0.14.0",
 ]
 
 [[package]]

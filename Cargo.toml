@@ -28,7 +28,7 @@ tinypci = { git = "https://github.com/trashbyte/tinypci", default-features = fal
 uart_16550 = "0.2.13"
 # TODO: volatile 0.4.0 is rewritten to use references instead of owned values
 volatile = "0.3.0"
-x86_64 = "0.13.6"
+x86_64 = "0.14.0"
 
 [[test]]
 name = "should_panic"
