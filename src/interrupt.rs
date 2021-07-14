@@ -1,7 +1,7 @@
 //! Interrupts, the programmable interrupt controller, and the interrupt descriptor table.
 
 use conquer_once::spin::Lazy;
-use pic8259_simple::ChainedPics;
+use pic8259::ChainedPics;
 use x86_64::structures::idt::InterruptDescriptorTable;
 
 use crate::{gdt, sync::Mutex};
